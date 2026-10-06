@@ -11,9 +11,9 @@ const revealObserver = new IntersectionObserver(entries => {
 world.querySelectorAll('[data-enter]').forEach(element => revealObserver.observe(element));
 
 const places = {
- presence: ['На объекте — отметка. В Anyloc — история присутствия.','Рабочий день<br>начинается здесь.','Сотрудник отмечается у входа. Руководитель видит, кто уже на объекте, когда началась смена и сколько времени отработано.'],
- service: ['На объекте — выполненная работа. В Anyloc — отчёт.','Проверили на месте.<br>Сохранили результат.','Сотрудник выполняет обслуживание и добавляет отчёт. Руководитель открывает детали, фотографии и замечания в панели.'],
- cleaning: ['На объекте — уборка. В Anyloc — запись о её выполнении.','Чистота на объекте.<br>Ясность в отчёте.','Сотрудник фиксирует уборку в приложении. Руководитель просматривает результат по нужному объекту и дате.']
+ presence: ['Учёт присутствия сотрудников','Учёт входов<br>и выходов','Сотрудник отмечает приход и уход через NFC-метку. Руководитель видит время на объекте и текущие смены.'],
+ service: ['Отчёты об обслуживании','Отчёты<br>об обслуживании','После обслуживания сотрудник отправляет отчёт с фото и замечаниями. Руководитель просматривает его в веб-панели.'],
+ cleaning: ['Отчёты об уборке','Отчёты<br>об уборке','Сотрудник отправляет отчёт об уборке из приложения. Руководитель может найти его по объекту и дате.']
 };
 document.querySelectorAll('[data-place]').forEach(button => button.addEventListener('click', () => {
  const data=places[button.dataset.place];
@@ -33,7 +33,7 @@ function setStep(index) {
  if(index===currentStep) return;
  currentStep=index;
  scene.dataset.stepView=String(index);
- document.querySelector('#phone-receipt').textContent=['Отметка сохранена','Результат — в отчёте','История доступна команде'][index];
+ document.querySelector('#phone-receipt').textContent=['Отметка сохранена','Отчёт сохранён','Запись добавлена в историю'][index];
  document.querySelectorAll('[data-ios-nav]').forEach(b=>b.setAttribute('aria-current',String(b.dataset.iosNav===String(index))));
  steps.forEach((button,i)=>{button.setAttribute('aria-selected',String(i===index));button.tabIndex=i===index?0:-1;pages[i].hidden=i!==index;});
 }
@@ -76,9 +76,9 @@ function schedule(){if(!pendingFrame)pendingFrame=requestAnimationFrame(draw);}
 addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule);quiet.addEventListener('change',schedule);schedule();
 
 const demos={
- presence:{heading:'Знайте, кто<br>уже на месте.',description:'Входы, выходы и время на объекте. Смотрите присутствие по сотрудникам и проверяйте историю за нужный период.',points:['Отметки через NFC','Присутствие сейчас и за период','Учёт рабочего времени'],screen:'presence'},
- reports:{heading:'Результат.<br>Со всеми деталями.',description:'Фото, комментарии и история работ привязаны к объекту. Откройте отчёт и посмотрите, что было сделано.',points:['Фото и файлы в отчёте','Журналы по объектам','История работ'],screen:'report'},
- tasks:{heading:'От задачи<br>до готовой работы.',description:'Назначайте работу, указывайте исполнителей и следите за статусами. Команда понимает, что нужно сделать.',points:['Ответственные и сроки','Статусы выполнения','Задачи и монтажные работы'],screen:'tasks'}
+ presence:{heading:'Кто сейчас<br>на объекте',description:'Смотрите, кто сейчас работает на объекте, когда сотрудники пришли и ушли. Проверяйте время за нужный период.',points:['Отметки через NFC','Присутствие сейчас и за период','Учёт рабочего времени'],screen:'presence'},
+ reports:{heading:'Отчёты<br>о выполненной работе',description:'Откройте отчёт по объекту, чтобы прочитать комментарий сотрудника и посмотреть фото или файлы.',points:['Фото и файлы в отчёте','Журналы по объектам','История работ'],screen:'report'},
+ tasks:{heading:'Задачи<br>для сотрудников',description:'Назначайте задачи сотрудникам, указывайте сроки и проверяйте статус выполнения.',points:['Ответственные и сроки','Статусы выполнения','Задачи и монтажные работы'],screen:'tasks'}
 };
 const tabs=[...document.querySelectorAll('[data-tab]')];
 function setTab(key){
