@@ -59,7 +59,7 @@ function draw() {
  if(quiet.matches)return;
  const viewport=innerHeight;
  const rect=journey.getBoundingClientRect();
- if(desktopStory.matches&&rect.bottom>0&&rect.top<viewport){
+ if(journey.dataset.scrollStory==='true'&&desktopStory.matches&&rect.bottom>0&&rect.top<viewport){
   const progress=clamp(-rect.top/Math.max(1,journey.offsetHeight-viewport));
   const step=Math.min(2,Math.floor(progress*3));
   if(step!==previousScrollStep){previousScrollStep=step;setStep(step);}

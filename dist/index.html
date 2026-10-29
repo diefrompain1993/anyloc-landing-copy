@@ -1,24 +1,30 @@
 <!doctype html>
-<html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#edf1f5"><title>Anyloc — каждый объект на связи</title><meta name="description" content="Присутствие сотрудников, задачи, журналы и отчёты по объектам в Anyloc. Всё начинается с касания NFC-метки."><link rel="icon" href="assets/favicon.png"><link rel="preload" as="image" href="assets/atrium.jpg"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="lower.css"><link rel="stylesheet" href="refinements.css"><link rel="stylesheet" href="product-ui.css"></head>
+<html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#edf1f5"><title>Anyloc — каждый объект на связи</title><meta name="description" content="Присутствие сотрудников, задачи, журналы и отчёты по объектам в Anyloc. Всё начинается с касания NFC-метки."><link rel="icon" href="assets/favicon.png"><link rel="preload" as="image" href="assets/atrium.jpg"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="lower.css"><link rel="stylesheet" href="refinements.css"><link rel="stylesheet" href="product-ui.css"><link rel="stylesheet" href="connected.css"></head>
 <body>
 <a class="skip" href="#platform">К содержанию</a>
-<header class="header"><a class="brand" href="#" aria-label="Anyloc — на главную"><img src="assets/anyloc-logo.png" width="178" height="50" alt="Anyloc"></a><nav aria-label="Основная навигация"><a href="#platform">Возможности</a><a href="#how">Как это работает</a><a href="#questions">Вопросы</a></nav><a class="header-cta" href="#demo">Посмотреть в деле <span>↗</span></a></header>
+<header class="header is-past-intro"><a class="brand" href="#" aria-label="Anyloc — на главную"><img src="assets/anyloc-logo.png" width="178" height="50" alt="Anyloc"></a><nav aria-label="Основная навигация"><a href="#network">Команда на связи</a><a href="#platform">Возможности</a><a href="#how">Как это работает</a><a href="#questions">Вопросы</a></nav><a class="header-cta" href="https://app.anyloc.ru">Открыть Anyloc <span>↗</span></a></header>
 <main>
-<section class="intro" id="top" aria-label="Знакомство с Anyloc">
-  <div class="intro-pin">
-    <div class="intro-environment" aria-hidden="true"></div>
-    <div class="intro-atmosphere" aria-hidden="true"></div>
-    <div class="intro-ground-shadow" aria-hidden="true"></div>
-    <div class="object-stage" id="object-stage" aria-hidden="true"><canvas id="plate"></canvas></div>
-    <h1 class="intro-brand"><img src="assets/anyloc-wordmark.png" width="2170" height="725" alt="Anyloc"></h1>
-    <div class="intro-reveal" aria-hidden="true"><p>Работа начинается с касания</p></div>
-    <div class="intro-progress" aria-hidden="true"><i></i></div>
-  </div>
+<section class="connected-hero" id="top">
+ <div class="hero-kicker"><span></span> ЛЮДИ. ОБЪЕКТЫ. ОДНА КОМАНДА.</div>
+ <h1>Большая работа.<br>Всегда <span>на связи.</span><svg viewBox="0 0 430 28" aria-hidden="true"><path d="M8 19 Q190 -4 419 12 M60 25 Q240 8 382 21"/></svg></h1>
+ <p>Объедините людей и работу на объектах.<br>От первого касания NFC до готового отчёта — в Anyloc.</p>
+ <div class="hero-actions"><a class="pill primary" href="https://app.anyloc.ru" target="_blank" rel="noopener noreferrer">Начать работу <span>↗</span></a><a class="pill secondary" href="#network">Посмотреть, как это работает <span>↓</span></a></div>
+ <div class="hero-art" aria-label="Иллюстрация: команда, объект и события в Anyloc">
+  <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
+  <div class="art-person person-left" data-avatar="0"></div><div class="art-person person-right" data-avatar="3"></div>
+  <div class="art-person person-small" data-avatar="2"></div>
+  <div class="hero-event event-check"><i>✓</i><div><b>Смена началась</b><small>NFC-отметка сохранена</small></div></div>
+  <div class="hero-event event-report"><i>▤</i><div><b>Отчёт отправлен</b><small>Вся команда в курсе</small></div></div>
+  <div class="object-illustration"><div class="building-roof"></div><div class="building-windows"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="building-door"></div><div class="building-sign"><img src="assets/anyloc-logo.png" alt="Anyloc"></div><div class="nfc-tag"><span>)))</span><small>NFC</small></div></div>
+  <span class="art-caption">Каждое действие — часть общей работы</span>
+ </div>
 </section>
 <div class="al-world">
-<section class="al-opening al-pad" id="platform">
-
-  <div class="al-opening-grid"><h2 data-enter>Удобный учёт<br>работы <em>на объектах</em></h2><div class="al-lead" data-enter><p>Сотрудники отмечают приход и уход, выполняют задачи и отправляют отчёты с объекта.</p><p>В Anyloc руководитель видит, кто на месте, сколько времени отработано и что сделано.</p><a class="al-text-link" href="#how">Как работает сервис <span>↗</span></a></div></div>
+<section class="connection-intro al-pad" id="platform"><p class="eyebrow">ОБЩАЯ КАРТИНА РАБОЧЕГО ДНЯ</p><h2>Разные объекты.<br><em>Одна точка понимания.</em></h2><p class="connection-description">Кто уже на месте? Что сделано? Где нужен ваш ответ?<br>Anyloc собирает отметки, задачи и отчёты в одном месте.</p><div class="context-strip"><span>◎ &nbsp; NFC-присутствие</span><span>▤ &nbsp; Отчёты и журналы</span><span>✓ &nbsp; Задачи команды</span><span>↗ &nbsp; Несколько объектов</span></div></section>
+<section class="people-network" id="network">
+ <div class="network-copy"><span class="network-eyebrow">ЗА КАЖДЫМ СОБЫТИЕМ — ЧЕЛОВЕК</span><h2>Свяжите людей.<br>Увидьте работу.</h2><p>Один пришёл на объект. Другой отправил фото. Третий подготовил отчёт. Отдельные действия складываются в общую историю вашей команды.</p><a class="pill light-outline" href="#demo">Посмотреть возможности <span>→</span></a><div class="network-key"><span><i class="key-green"></i>Вход</span><span><i class="key-purple"></i>Отчёт</span><span><i class="key-blue"></i>Фото</span><span><i class="key-orange"></i>Выход</span></div></div>
+ <div class="network-visual"><svg id="people-graph" viewBox="0 0 1000 680" role="img" aria-label="Линии передают события между людьми. При получении события аватар подсвечивается, а справа снизу появляется значок действия."></svg></div>
+ <div class="network-footer"><span>Иллюстрация рабочего дня в Anyloc</span><button id="motion-toggle" aria-pressed="false">Ⅱ &nbsp; Пауза анимации</button></div>
 </section>
 <section class="al-object al-scenarios" aria-label="Сценарии работы на объекте" data-parallax>
  <img class="al-scene-img" src="assets/passage.jpg" width="1536" height="1024" alt="Атриум современного здания" loading="lazy">
@@ -35,8 +41,8 @@
  </div>
 </section>
 <section class="al-control al-pad" id="demo">
- <div class="al-control-heading"><div><h2 data-enter>Следите за работой<br><em>с компьютера</em></h2></div><p data-enter>Проверяйте рабочее время, читайте отчёты и назначайте задачи в веб-панели Anyloc.</p></div>
- <div class="al-demo-shell"><div class="demo-tabs" role="tablist" aria-label="Возможности Anyloc"><button role="tab" id="tab-presence" aria-controls="demo-panel" aria-selected="true" data-tab="presence">01 <span>Присутствие</span></button><button role="tab" id="tab-reports" aria-controls="demo-panel" aria-selected="false" tabindex="-1" data-tab="reports">02 <span>Отчёты и журналы</span></button><button role="tab" id="tab-tasks" aria-controls="demo-panel" aria-selected="false" tabindex="-1" data-tab="tasks">03 <span>Задачи и монтаж</span></button></div>
+ <div class="al-control-heading"><div><h2 data-enter>Вся работа команды.<br><em>Перед глазами.</em></h2></div><p data-enter>Проверяйте рабочее время, читайте отчёты и назначайте задачи в веб-панели Anyloc.</p></div>
+ <p class="demo-disclaimer">Интерактивный пример · демонстрационные данные</p><div class="al-demo-shell"><div class="demo-tabs" role="tablist" aria-label="Возможности Anyloc"><button role="tab" id="tab-presence" aria-controls="demo-panel" aria-selected="true" data-tab="presence">01 <span>Присутствие</span></button><button role="tab" id="tab-reports" aria-controls="demo-panel" aria-selected="false" tabindex="-1" data-tab="reports">02 <span>Отчёты и журналы</span></button><button role="tab" id="tab-tasks" aria-controls="demo-panel" aria-selected="false" tabindex="-1" data-tab="tasks">03 <span>Задачи и монтаж</span></button></div>
  <div class="al-demo-body"><div class="al-demo-overview"><h3 id="demo-heading"></h3><p id="demo-description"></p><ul id="demo-points"></ul></div>
  <div class="al-dashboard-perspective" data-dashboard><div class="app-window" id="demo-panel" role="tabpanel" aria-labelledby="tab-presence" tabindex="0"><div id="app-content"></div></div></div>
  </div></div>
