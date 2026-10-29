@@ -10,18 +10,24 @@ const revealObserver = new IntersectionObserver(entries => {
 }, {threshold: .12});
 world.querySelectorAll('[data-enter]').forEach(element => revealObserver.observe(element));
 
-const places = {
- presence: ['Учёт присутствия сотрудников','Учёт входов<br>и выходов','Сотрудник отмечает приход и уход через NFC-метку. Руководитель видит время на объекте и текущие смены.'],
- service: ['Отчёты об обслуживании','Отчёты<br>об обслуживании','После обслуживания сотрудник отправляет отчёт с фото и замечаниями. Руководитель просматривает его в веб-панели.'],
- cleaning: ['Отчёты об уборке','Отчёты<br>об уборке','Сотрудник отправляет отчёт об уборке из приложения. Руководитель может найти его по объекту и дате.']
+const storyIcon=(type)=>`<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${({check:'<path d="m5 12 4 4L19 6"/>',nfc:'<path d="M7 8a6 6 0 0 1 0 8M11 5a10 10 0 0 1 0 14M15 2a14 14 0 0 1 0 20"/>',file:'<path d="M14 3H5v18h14V8Zm0 0v5h5M8 12h8M8 16h6"/>',camera:'<path d="M3 7h4l2-3h6l2 3h4v14H3Z"/><circle cx="12" cy="13" r="4"/>'})[type]}</svg>`;
+const stories={
+ presence:{number:'01 / ПРИСУТСТВИЕ',heading:'Начало смены.<br>Одно касание.',text:'Телефон касается NFC-метки — приход отмечен. Руководителю не нужно уточнять, кто уже на месте: всё видно в Anyloc.',tags:['Вход и выход','Рабочее время'],link:'Посмотреть учёт присутствия',screen:'presence',title:'Вы на месте',subtitle:'Начало смены · 09:41',icon:'nfc',event:'Вход подтверждён',detail:'БЦ Орион · Алексей Воронов'},
+ service:{number:'02 / ОБСЛУЖИВАНИЕ',heading:'Работа сделана.<br>Детали сохранены.',text:'Проверили оборудование? Добавьте фото и комментарий к отчёту. В журнале объекта останется вся история обслуживания.',tags:['Фото и комментарии','Журнал объекта'],link:'Посмотреть пример отчёта',screen:'reports',title:'Всё в порядке',subtitle:'Проверка оборудования',icon:'file',event:'Отчёт в журнале',detail:'Осмотр завершён · 2 фотографии'},
+ cleaning:{number:'03 / КЛИНИНГ',heading:'Чистый результат.<br>Понятный отчёт.',text:'Команда завершает уборку и отправляет фотографии из приложения. Руководитель видит результат по каждому объекту.',tags:['Отчёты с объекта','История работ'],link:'Посмотреть отчёт о работе',screen:'reports',title:'Готово к новому дню',subtitle:'Уборка общих зон',icon:'camera',event:'Результат сохранён',detail:'БЦ Орион · Отчёт об уборке'}
 };
-document.querySelectorAll('[data-place]').forEach(button => button.addEventListener('click', () => {
- const data=places[button.dataset.place];
- document.querySelectorAll('[data-place]').forEach(other=>other.setAttribute('aria-pressed',String(other===button)));
- const detail=document.querySelector('#place-detail');
- detail.innerHTML=`<h3>${data[1]}</h3><p>${data[2]}</p>`;
- if(!quiet.matches) detail.animate([{opacity:.3,transform:'translateY(7px)'},{opacity:1,transform:'translateY(0)'}],{duration:280,easing:'ease-out'});
-}));
+function setStory(key,animate=true){
+ const d=stories[key],panel=document.querySelector('#story-panel');
+ document.querySelectorAll('[data-place]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.place===key)));
+ panel.dataset.story=key;
+ document.querySelector('#place-detail').innerHTML=`<span class="story-index">${d.number}</span><h3>${d.heading}</h3><p>${d.text}</p><div class="story-tags">${d.tags.map(t=>`<span>${storyIcon('check')}${t}</span>`).join('')}</div><a class="story-link" href="#demo" data-story-demo="${d.screen}">${d.link} <span>→</span></a>`;
+ const middle=key==='presence'?`<div class="tap-scene"><div class="tap-mark">${storyIcon('nfc')}<small>ANYLOC / NFC</small></div><div class="tap-rings"></div><div class="tap-phone"><div class="tap-island"></div><span class="tap-time">9:41</span><div class="tap-success">${storyIcon('check')}</div><b>Вы на объекте</b><small>БЦ Орион</small><span class="tap-phone-line"></span></div></div>`:key==='service'?`<div class="report-scene"><div class="report-sheet"><span class="sheet-overline">ANYLOC / ЖУРНАЛ ОБЪЕКТА</span><h4>Проверка оборудования</h4><div class="sheet-rule"></div><p>Осмотр завершён.<br>Отклонений не выявлено.</p><div class="sheet-photos"><img src="assets/technical-room.png" alt="Пример фотографии оборудования"><img src="assets/utility-inspection.png" alt="Пример фотографии осмотра"></div><span class="sheet-status">${storyIcon('check')} Отчёт сохранён</span></div><div class="floating-symbol">${storyIcon('file')}</div></div>`:`<div class="clean-scene"><div class="clean-tile"><div class="clean-window"><i></i><i></i><i></i><i></i></div><div class="clean-floor"></div><span class="sparkle spark-one">✦</span><span class="sparkle spark-two">✧</span></div><div class="clean-note"><span class="sheet-overline">ОТЧЁТ ОБ УБОРКЕ</span><b>Общие зоны готовы</b><span>${storyIcon('check')} Фото приложены</span><span>${storyIcon('check')} Комментарий добавлен</span></div><div class="floating-symbol">${storyIcon('camera')}</div></div>`;
+ document.querySelector('#story-visual').innerHTML=`<div class="visual-orbit"></div><div class="visual-orbit orbit-inner"></div><span class="visual-caption">${d.subtitle}</span>${middle}<div class="story-receipt"><span class="receipt-icon">${storyIcon('check')}</span><div><b>${d.event}</b><small>${d.detail}</small></div><span class="receipt-dot"></span></div>`;
+ if(animate&&!quiet.matches){panel.querySelectorAll('.story-copy,.story-visual').forEach(el=>el.animate([{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'translateY(0)'}],{duration:450,easing:'cubic-bezier(.22,1,.36,1)'}));}
+}
+document.querySelectorAll('[data-place]').forEach(b=>b.addEventListener('click',()=>setStory(b.dataset.place)));
+document.querySelector('.work-stories').addEventListener('click',e=>{const a=e.target.closest('[data-story-demo]');if(a)setTab(a.dataset.storyDemo);});
+setStory('presence',false);
 
 const journey=document.querySelector('.al-journey');
 const scene=document.querySelector('.al-phone-scene');

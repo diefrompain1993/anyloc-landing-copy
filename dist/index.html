@@ -26,11 +26,11 @@
  <div class="network-visual"><svg id="people-graph" viewBox="0 0 1000 680" role="img" aria-label="Линии передают события между людьми. При получении события аватар подсвечивается, а справа снизу появляется значок действия."></svg></div>
  <div class="network-footer"><span>Иллюстрация рабочего дня в Anyloc</span><button id="motion-toggle" aria-pressed="false">Ⅱ &nbsp; Пауза анимации</button></div>
 </section>
-<section class="al-object al-scenarios" aria-label="Сценарии работы на объекте" data-parallax>
- <img class="al-scene-img" src="assets/passage.jpg" width="1536" height="1024" alt="Атриум современного здания" loading="lazy">
- <div class="al-object-top"><span>Учёт работы на объекте</span></div>
- <div class="al-scenario-layout"><div class="al-place-detail" id="place-detail" aria-live="polite"><h3>Учёт входов<br>и выходов</h3><p>Сотрудник отмечает приход и уход через NFC-метку. Руководитель видит время на объекте и текущие смены.</p></div>
- <div class="al-scenario-actions" role="group" aria-label="Выберите рабочий сценарий"><button data-place="presence" aria-pressed="true" aria-controls="place-detail"><span>Вход и выход</span><b>↗</b></button><button data-place="service" aria-pressed="false" aria-controls="place-detail"><span>Обслуживание</span><b>↗</b></button><button data-place="cleaning" aria-pressed="false" aria-controls="place-detail"><span>Клининг</span><b>↗</b></button></div></div>
+<section class="work-stories" id="scenarios" aria-labelledby="stories-heading">
+ <div class="stories-heading"><p class="eyebrow">ОДИН СЕРВИС. РАЗНЫЕ СЦЕНАРИИ.</p><h2 id="stories-heading">Работа меняется.<br><em>Всё остаётся на связи.</em></h2><p>От начала смены до последней выполненной задачи.<br>Выберите, как ваша команда использует Anyloc.</p></div>
+ <div class="story-tabs" role="group" aria-label="Сценарии работы"><button data-place="presence" aria-pressed="true" aria-controls="story-panel"><span>01</span> Присутствие</button><button data-place="service" aria-pressed="false" aria-controls="story-panel"><span>02</span> Обслуживание</button><button data-place="cleaning" aria-pressed="false" aria-controls="story-panel"><span>03</span> Клининг</button></div>
+ <div class="story-panel" id="story-panel" data-story="presence"><div class="story-copy" id="place-detail" aria-live="polite"></div><div class="story-visual" id="story-visual" aria-label="Иллюстрация выбранного сценария"></div></div>
+ <div class="stories-foot"><span>Сотрудник действует в приложении. Руководитель видит результат.</span><span>Иллюстративный пример</span></div>
 </section>
 <section class="al-journey" id="how" aria-label="Как работает Anyloc">
  <div class="al-journey-pin al-pad">
