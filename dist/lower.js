@@ -20,13 +20,12 @@ function setStory(key,animate=true){
  const d=stories[key],panel=document.querySelector('#story-panel');
  document.querySelectorAll('[data-place]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.place===key)));
  panel.dataset.story=key;
- document.querySelector('#place-detail').innerHTML=`<span class="story-index">${d.number}</span><h3>${d.heading}</h3><p>${d.text}</p><div class="story-tags">${d.tags.map(t=>`<span>${storyIcon('check')}${t}</span>`).join('')}</div><a class="story-link" href="#demo" data-story-demo="${d.screen}">${d.link} <span>→</span></a>`;
+ document.querySelector('#place-detail').innerHTML=`<span class="story-index">${d.number}</span><h3>${d.heading}</h3><p>${d.text}</p><div class="story-tags">${d.tags.map(t=>`<span>${storyIcon('check')}${t}</span>`).join('')}</div><button class="story-link" data-open-ui="${d.screen==='presence'?'presence':'report'}">${d.link} <span>→</span></button>`;
  const middle=key==='presence'?`<div class="tap-scene"><div class="tap-mark">${storyIcon('nfc')}<small>ANYLOC / NFC</small></div><div class="tap-rings"></div><div class="tap-phone"><div class="tap-island"></div><span class="tap-time">9:41</span><div class="tap-success">${storyIcon('check')}</div><b>Вы на объекте</b><small>БЦ Орион</small><span class="tap-phone-line"></span></div></div>`:key==='service'?`<div class="report-scene"><div class="report-sheet"><span class="sheet-overline">ANYLOC / ЖУРНАЛ ОБЪЕКТА</span><h4>Проверка оборудования</h4><div class="sheet-rule"></div><p>Осмотр завершён.<br>Отклонений не выявлено.</p><div class="sheet-photos"><img src="assets/technical-room.png" alt="Пример фотографии оборудования"><img src="assets/utility-inspection.png" alt="Пример фотографии осмотра"></div><span class="sheet-status">${storyIcon('check')} Отчёт сохранён</span></div><div class="floating-symbol">${storyIcon('file')}</div></div>`:`<div class="clean-scene"><div class="clean-tile"><div class="clean-window"><i></i><i></i><i></i><i></i></div><div class="clean-floor"></div><span class="sparkle spark-one">✦</span><span class="sparkle spark-two">✧</span></div><div class="clean-note"><span class="sheet-overline">ОТЧЁТ ОБ УБОРКЕ</span><b>Общие зоны готовы</b><span>${storyIcon('check')} Фото приложены</span><span>${storyIcon('check')} Комментарий добавлен</span></div><div class="floating-symbol">${storyIcon('camera')}</div></div>`;
  document.querySelector('#story-visual').innerHTML=`<div class="visual-orbit"></div><div class="visual-orbit orbit-inner"></div><span class="visual-caption">${d.subtitle}</span>${middle}<div class="story-receipt"><span class="receipt-icon">${storyIcon('check')}</span><div><b>${d.event}</b><small>${d.detail}</small></div><span class="receipt-dot"></span></div>`;
  if(animate&&!quiet.matches){panel.querySelectorAll('.story-copy,.story-visual').forEach(el=>el.animate([{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'translateY(0)'}],{duration:450,easing:'cubic-bezier(.22,1,.36,1)'}));}
 }
 document.querySelectorAll('[data-place]').forEach(b=>b.addEventListener('click',()=>setStory(b.dataset.place)));
-document.querySelector('.work-stories').addEventListener('click',e=>{const a=e.target.closest('[data-story-demo]');if(a)setTab(a.dataset.storyDemo);});
 setStory('presence',false);
 
 const journey=document.querySelector('.al-journey');
@@ -57,7 +56,6 @@ steps.forEach((button,index)=>{
 });
 
 const parallaxes=[...world.querySelectorAll('[data-parallax]')];
-const dashboard=world.querySelector('[data-dashboard]');
 let pendingFrame=0;
 const clamp=value=>Math.max(0,Math.min(1,value));
 function draw() {
@@ -75,32 +73,10 @@ function draw() {
   const bounds=element.getBoundingClientRect();
   if(bounds.bottom>0&&bounds.top<viewport){const progress=clamp((viewport-bounds.top)/(viewport+bounds.height));element.style.setProperty('--scene-y',`${(progress-.5)*48}px`);}
  });
- const bounds=dashboard.getBoundingClientRect();
- if(bounds.bottom>0&&bounds.top<viewport){const progress=clamp((viewport-bounds.top)/(viewport*.85));dashboard.style.setProperty('--dashboard-angle',`${(1-progress)*7}deg`);}
 }
 function schedule(){if(!pendingFrame)pendingFrame=requestAnimationFrame(draw);}
 addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule);quiet.addEventListener('change',schedule);schedule();
 
-const demos={
- presence:{heading:'Кто сейчас<br>на объекте',description:'Смотрите, кто сейчас работает на объекте, когда сотрудники пришли и ушли. Проверяйте время за нужный период.',points:['Отметки через NFC','Присутствие сейчас и за период','Учёт рабочего времени'],screen:'presence'},
- reports:{heading:'Отчёты<br>о выполненной работе',description:'Откройте отчёт по объекту, чтобы прочитать комментарий сотрудника и посмотреть фото или файлы.',points:['Фото и файлы в отчёте','Журналы по объектам','История работ'],screen:'report'},
- tasks:{heading:'Задачи<br>для сотрудников',description:'Назначайте задачи сотрудникам, указывайте сроки и проверяйте статус выполнения.',points:['Ответственные и сроки','Статусы выполнения','Задачи и монтажные работы'],screen:'tasks'}
-};
-const tabs=[...document.querySelectorAll('[data-tab]')];
-function setTab(key){
- const data=demos[key];
- document.querySelector('#demo-heading').innerHTML=data.heading;
- document.querySelector('#demo-description').textContent=data.description;
- document.querySelector('#demo-points').innerHTML=data.points.map(point=>`<li>${point}</li>`).join('');
- document.querySelector('#app-content').innerHTML=adminView(data.screen);
- document.querySelector('#demo-panel').setAttribute('aria-labelledby',`tab-${key}`);
- tabs.forEach(tab=>{const active=tab.dataset.tab===key;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;});
-}
-tabs.forEach((button,index)=>{
- button.addEventListener('click',()=>setTab(button.dataset.tab));
- button.addEventListener('keydown',event=>{let next;if(event.key==='ArrowRight')next=(index+1)%tabs.length;else if(event.key==='ArrowLeft')next=(index+tabs.length-1)%tabs.length;else if(event.key==='Home')next=0;else if(event.key==='End')next=tabs.length-1;else return;event.preventDefault();setTab(tabs[next].dataset.tab);tabs[next].focus();});
-});
-setTab('presence');
 const preview=document.querySelector('#interface-preview');
 let previousFocus;
 function openUI(key,value){
