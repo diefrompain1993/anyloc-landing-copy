@@ -28,6 +28,7 @@ jobs:
       - name: Check JavaScript
         run: |
           node --check dist/main.js
+          node --check dist/finale-tag.js
           node --check dist/lower.js
           node --check dist/product-ui.js
       - name: Version browser assets

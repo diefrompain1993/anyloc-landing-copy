@@ -151,3 +151,22 @@ button.story-link{border:0;padding:0;background:transparent;text-align:left;font
 /* Continue the hero tint into the next section, fading before its content. */
 .connection-intro{background:linear-gradient(180deg,#f0f5ff 0,#f7f9ff 45px,#fff 110px)}
 @media(max-width:700px){.connection-intro{background:linear-gradient(180deg,#f0f5ff 0,#f7f9ff 28px,#fff 72px)}}
+/* Interactive original NFC plate in the closing call to action. */
+.al-finale{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);align-items:center;gap:35px;padding:60px 7% 85px;min-height:540px}
+.al-finale .al-finale-content{padding:0;text-align:left;min-width:0}
+.al-finale h2{font-size:clamp(34px,4.3vw,66px);line-height:1.12}
+.al-finale-content>p{font-size:15px;line-height:1.8}
+.finale-tag{position:relative;min-width:0;width:100%;max-width:480px;height:410px;justify-self:center;isolation:isolate}
+.finale-tag canvas{position:relative;z-index:2;display:block;width:100%;height:370px;cursor:grab;touch-action:none;opacity:0;transition:opacity .35s;border-radius:24px;-webkit-tap-highlight-color:transparent}
+.finale-tag[data-state=ready] canvas{opacity:1}.finale-tag canvas.is-dragging{cursor:grabbing}.finale-tag canvas:focus-visible{outline:2px solid #2768df;outline-offset:-5px}
+.tag-shadow{position:absolute;width:58%;height:25px;bottom:53px;left:21%;border-radius:50%;background:#40536d30;filter:blur(14px);z-index:0;pointer-events:none}
+.tag-controls{position:relative;z-index:3;display:flex;justify-content:center;align-items:center;gap:14px;color:#77849a;font-size:11px}
+.tag-reset{width:30px;height:30px;display:grid;place-items:center;background:#ffffff70;border:1px solid #cedaeb;border-radius:50%;color:#5f718d;cursor:pointer;transition:background .2s}
+.tag-reset:hover{background:white;color:#2768df}.tag-reset:focus-visible{outline:2px solid #2768df;outline-offset:3px}.tag-reset svg{width:15px;height:15px}
+.tag-fallback{position:absolute;z-index:1;width:65%;aspect-ratio:1;left:17.5%;top:35px;background:#424950;border-radius:18px;box-shadow:6px 8px 0 #29323e;transform:perspective(700px) rotateY(-15deg) rotateZ(-3deg);pointer-events:none;overflow:hidden}
+.tag-fallback-phone{position:absolute;inset:5% 16% -3%;border:3px double #e3b573;border-radius:28px 28px 0 0;display:flex;align-items:center;flex-direction:column;justify-content:space-around;color:#e3b573}
+.tag-fallback-phone i{display:block;width:55%;aspect-ratio:1;border-radius:50%;background:#e8ebed;margin-top:22%}.tag-fallback-phone b{font-size:clamp(20px,2vw,30px);font-weight:500;margin:10% 0}
+.finale-tag[data-state=ready] .tag-fallback{display:none}.finale-tag[data-state=fallback] .tag-controls{visibility:hidden}
+@media(max-width:1050px){.al-finale{gap:15px;padding:45px 5% 85px;min-height:480px}.finale-tag{height:350px}.finale-tag canvas{height:310px}.al-finale h2{font-size:38px}}
+@media(max-width:700px){.al-finale{grid-template-columns:1fr;gap:15px;padding:48px 6% 75px}.al-finale .al-finale-content{text-align:center}.al-finale h2{font-size:34px}.finale-tag{height:330px;max-width:360px}.finale-tag canvas{height:295px}.tag-controls{font-size:10px}.tag-shadow{bottom:43px}}
+@media(prefers-reduced-motion:reduce){.finale-tag canvas,.tag-reset{transition:none}}

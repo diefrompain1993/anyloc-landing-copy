@@ -16,7 +16,7 @@ await writeFile(join(output,moduleName),moduleData);
 let html = await readFile(join(source, 'index.html'), 'utf8');
 
 // New filenames prevent a fresh page from reusing an older cached script or stylesheet.
-for (const [asset, attribute] of [['main.js', 'src'], ['connected.css', 'href'], ['style.css', 'href'], ['lower.js', 'src'], ['lower.css', 'href'], ['refinements.css', 'href'], ['product-ui.css', 'href']]) {
+for (const [asset, attribute] of [['main.js', 'src'], ['finale-tag.js', 'src'], ['connected.css', 'href'], ['style.css', 'href'], ['lower.js', 'src'], ['lower.css', 'href'], ['refinements.css', 'href'], ['product-ui.css', 'href']]) {
   let data = await readFile(join(source, asset));
   if(asset==='lower.js')data=Buffer.from(data.toString().replace('./product-ui.js','./'+moduleName));
   const hash = createHash('sha256').update(data).digest('hex').slice(0, 12);
