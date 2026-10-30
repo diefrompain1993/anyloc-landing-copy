@@ -44,15 +44,18 @@
  </div>
  <div class="mobile-panel" id="mobile-panel" role="tabpanel" aria-labelledby="mobile-tab-objects" tabindex="0"><div class="mobile-copy" id="mobile-copy"></div><div class="mobile-collage" id="mobile-collage"></div></div>
 </section>
-<section class="team-space" id="features" aria-labelledby="space-heading">
- <div class="space-heading"><div><h2 id="space-heading">Журналы и настройки<br><em>для вашей команды</em></h2></div><p>Настраивайте доступ сотрудников и NFC-метки,<br>просматривайте историю работ<br>и выгружайте данные для расчётов.</p></div>
- <div class="space-layout"><div class="space-controls" role="group" aria-label="Возможности команды">
- <button data-feature="journal" aria-pressed="true" aria-controls="space-stage"><span class="feature-number">01</span><span class="feature-copy"><strong>Журнал работ по объекту</strong><span>Фото, комментарии и результаты работ — в журнале объекта.</span></span><span class="feature-arrow">↗</span></button>
- <button data-feature="access" aria-pressed="false" aria-controls="space-stage"><span class="feature-number">02</span><span class="feature-copy"><strong>Доступ по ролям и объектам</strong><span>Сотрудники, подрядчики и руководители в одной системе.</span></span><span class="feature-arrow">↗</span></button>
- <button data-feature="tags" aria-pressed="false" aria-controls="space-stage"><span class="feature-number">03</span><span class="feature-copy"><strong>Настройка NFC-меток</strong><span>Настройте NFC-метку под присутствие или журнал.</span></span><span class="feature-arrow">↗</span></button>
- <button data-feature="export" aria-pressed="false" aria-controls="space-stage"><span class="feature-number">04</span><span class="feature-copy"><strong>Выгрузка в Excel, CSV и JSON</strong><span>Выгружайте записи для расчётов, сверок и отчётности.</span></span><span class="feature-arrow">↗</span></button>
- </div><div class="space-stage" id="space-stage" data-feature-view="journal" aria-live="polite"></div></div>
-
+<section class="team-workspace" id="features" aria-labelledby="space-heading">
+ <div class="workspace-intro"><h2 id="space-heading">Управляйте работой<br><em>на ваших объектах</em></h2><p>Отчёты, доступ сотрудников, NFC-метки и выгрузки — в веб-панели Anyloc.</p></div>
+ <div class="workspace-shell" id="team-preview">
+ <div class="workspace-top"><span class="workspace-brand"><img src="assets/favicon.png" alt="" width="26" height="26">Anyloc <span>/</span> БЦ Орион</span><span class="workspace-example">Пример объекта</span></div>
+ <div class="workspace-tabs" role="tablist" aria-label="Возможности команды">
+ <button id="feature-journal" role="tab" data-feature="journal" aria-selected="true" aria-controls="space-stage"><span>01</span>Журнал работ</button>
+ <button id="feature-access" role="tab" data-feature="access" aria-selected="false" aria-controls="space-stage" tabindex="-1"><span>02</span>Доступ команды</button>
+ <button id="feature-tags" role="tab" data-feature="tags" aria-selected="false" aria-controls="space-stage" tabindex="-1"><span>03</span>NFC-метки</button>
+ <button id="feature-export" role="tab" data-feature="export" aria-selected="false" aria-controls="space-stage" tabindex="-1"><span>04</span>Выгрузка данных</button>
+ </div>
+ <div class="workspace-body" id="space-stage" role="tabpanel" aria-labelledby="feature-journal" tabindex="0"></div>
+ </div>
 </section>
 <section class="al-faq al-pad" id="questions"><div class="al-faq-intro"><h2>Остались<br><em>вопросы?</em></h2><div class="al-faq-visual" aria-hidden="true"><span>(</span><i></i><span>)</span></div></div><div class="faq-list"><details open><summary>Что понадобится для работы?<span>+</span></summary><p>Понадобятся NFC-метка на объекте, смартфон с поддержкой NFC и приложение Anyloc. Руководитель работает в веб-панели. Администратор добавляет объекты и сотрудников, настраивает доступ.</p></details><details><summary>Что происходит, если нет интернета?<span>+</span></summary><p>Приложение сохраняет NFC-отметки без интернета и отправляет их, когда связь восстановится. В веб-панели они появятся после синхронизации и проверки. Работа без сети зависит от устройства и настроек.</p></details><details><summary>Можно работать с несколькими подрядчиками?<span>+</span></summary><p>Да. Добавьте подрядные организации и их сотрудников. В панели можно посмотреть работу всех подрядчиков или данные по одному из них.</p></details><details><summary>Чем отличаются метки посещения и журнала?<span>+</span></summary><p>Метка посещения нужна для учёта прихода и ухода. Метка журнала — для отправки отчётов о работе. При настройке укажите назначение метки и объект, к которому она относится.</p></details></div></section>
 <section class="al-finale" id="start" data-parallax><img class="al-scene-img" src="assets/atrium.jpg" alt="Светлый атриум Anyloc" loading="lazy"><div class="al-finale-content"><h2 data-enter>Откройте Anyloc<br><em>для работы с объектами</em></h2><p>Учёт времени, задачи и отчёты<br>для сотрудников и руководителей.</p></div><div class="finale-tag" id="finale-tag" data-state="loading"><div class="tag-shadow" aria-hidden="true"></div><div class="tag-fallback" aria-hidden="true"><div class="tag-fallback-phone"><i></i><b>Anyloc</b></div></div><canvas tabindex="0" role="img" aria-label="3D NFC-метка Anyloc. Перетаскивайте для вращения или используйте стрелки клавиатуры. Home — исходный ракурс."></canvas></div><div class="al-finale-bottom"><a href="#top">Вернуться наверх ↑</a></div></section>
