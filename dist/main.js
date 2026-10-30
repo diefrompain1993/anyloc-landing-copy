@@ -23,15 +23,46 @@ const edges=[[0,1],[1,2],[2,4],[4,3],[3,6],[6,7],[7,4],[4,5],[5,2],[2,0],[0,3],[
 graph.innerHTML=`<defs><filter id="soft-glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="7"/></filter></defs><g>${edges.map(([a,b],i)=>{const A=people[a],B=people[b],d=`M${A[0]} ${A[1]} Q${(A[0]+B[0])/2+20} ${(A[1]+B[1])/2-25} ${B[0]} ${B[1]}`;return `<path class="graph-thread" d="${d}"/><path id="signal-${i}" class="graph-signal" pathLength="1" stroke="${actions[B[7]][1]}" d="${d}"/>`;}).join('')}</g><g>${people.map((p,i)=>{const a=actions[p[7]];return `<g transform="translate(${p[0]} ${p[1]})"><g id="person-${i}" class="graph-person"><circle class="person-glow" r="54" fill="${a[1]}" filter="url(#soft-glow)" opacity="0"/><circle class="person-ring" r="51" fill="none" stroke="${a[1]}" stroke-width="2" opacity="0"/>${portrait(p,i)}<g class="action-badge" transform="translate(24 24)" opacity="0"><rect x="-3" y="-3" width="44" height="44" rx="15" fill="#1e2023"/><rect width="38" height="38" rx="12" fill="${a[1]}"/><g fill="none" stroke="#25302d" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">${a[2]}</g></g></g><text class="person-name" y="77">${p[6]}</text><text class="person-action" id="action-${i}" y="97" fill="${a[1]}">${a[0]}</text></g>`;}).join('')}</g>`;
 const signals=edges.map((_,i)=>graph.querySelector(`#signal-${i}`));
 const nodes=people.map((_,i)=>({body:graph.querySelector(`#person-${i}`),glow:graph.querySelector(`#person-${i} .person-glow`),ring:graph.querySelector(`#person-${i} .person-ring`),badge:graph.querySelector(`#person-${i} .action-badge`),label:graph.querySelector(`#action-${i}`)}));
+// Each arrival advances that person's action, including across loop boundaries.
+const visitsPerPerson=people.map((_,person)=>edges.filter(([,to])=>to===person).length);
+const visitOrder=edges.map(([,to],index)=>edges.slice(0,index).filter(([,target])=>target===to).length);
+function actionForEvent(edgeIndex,lap){
+ const person=edges[edgeIndex][1];
+ return (people[person][7]+visitOrder[edgeIndex]+lap*visitsPerPerson[person])%actions.length;
+}
+const shownActions=people.map(p=>p[7]);
+function showAction(person,action){
+ if(shownActions[person]===action)return;
+ shownActions[person]=action;
+ const n=nodes[person],a=actions[action];
+ n.glow.setAttribute('fill',a[1]);n.ring.setAttribute('stroke',a[1]);
+ n.badge.querySelector('rect:nth-child(2)').setAttribute('fill',a[1]);
+ n.badge.querySelector('g').innerHTML=a[2];
+ n.label.textContent=a[0];n.label.setAttribute('fill',a[1]);
+}
 const quiet=matchMedia('(prefers-reduced-motion: reduce)'),toggle=document.querySelector('#motion-toggle');
 let paused=quiet.matches,visible=false,frame=0,last=0,clock=0;
 const stagger=2100,travel=1650,cycle=edges.length*stagger,clamp=x=>Math.min(1,Math.max(0,x)),smooth=x=>x*x*(3-2*x);
 function render(){
- const activation=people.map(()=>0);
- signals.forEach((line,i)=>{const age=(clock-i*stagger+cycle)%cycle,t=clamp(age/travel),fade=1-clamp((age-travel)/900);line.style.strokeDashoffset=String(1-smooth(t));line.style.opacity=String(fade*.9);const arrival=age-travel;if(arrival>=0&&arrival<4100){const intro=clamp(arrival/540),out=1-smooth(clamp((arrival-2800)/1300));activation[edges[i][1]]=Math.max(activation[edges[i][1]],smooth(intro)*out);}});
+ const activation=people.map(()=>0),latestArrival=people.map(()=>Infinity);
+ signals.forEach((line,i)=>{
+  const elapsed=clock-i*stagger;
+  if(elapsed<0){line.style.opacity='0';return;}
+  const lap=Math.floor(elapsed/cycle),age=elapsed-lap*cycle;
+  const action=actionForEvent(i,lap),t=clamp(age/travel),fade=1-clamp((age-travel)/900);
+  line.setAttribute('stroke',actions[action][1]);
+  line.style.strokeDashoffset=String(1-smooth(t));line.style.opacity=String(fade*.9);
+  const arrival=age-travel,person=edges[i][1];
+  if(arrival>=0&&arrival<4100&&arrival<latestArrival[person]){
+   latestArrival[person]=arrival;
+   const intro=clamp(arrival/540),out=1-smooth(clamp((arrival-2800)/1300));
+   activation[person]=smooth(intro)*out;
+   showAction(person,action);
+  }
+ });
  nodes.forEach((n,i)=>{const t=quiet.matches?1:activation[i];n.glow.setAttribute('opacity',String(t*.32));n.ring.setAttribute('opacity',String(t*.8));n.body.setAttribute('transform',`scale(${1+t*.045})`);const pop=1+Math.sin(t*Math.PI)*.13;n.badge.setAttribute('opacity',String(t));n.badge.setAttribute('transform',`translate(24 ${24+(1-t)*9}) scale(${(.72+.28*t)*pop})`);n.label.setAttribute('opacity',String(t));});
 }
-function tick(now){frame=0;if(paused||!visible||document.hidden)return;if(last)clock=(clock+Math.min(now-last,80))%cycle;last=now;render();frame=requestAnimationFrame(tick);}
+function tick(now){frame=0;if(paused||!visible||document.hidden)return;if(last)clock+=Math.min(now-last,80);last=now;render();frame=requestAnimationFrame(tick);}
 function sync(){cancelAnimationFrame(frame);frame=0;last=0;document.querySelector('.hero-art').classList.toggle('motion-paused',paused||document.hidden);toggle.setAttribute('aria-pressed',String(paused));toggle.textContent=paused?'▶  Продолжить анимацию':'Ⅱ  Пауза анимации';if(!paused&&visible&&!document.hidden)frame=requestAnimationFrame(tick);}
 new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;sync();},{threshold:.05}).observe(graph);
 toggle.addEventListener('click',()=>{paused=!paused;sync();});quiet.addEventListener('change',()=>{paused=quiet.matches;render();sync();});document.addEventListener('visibilitychange',sync);render();sync();
