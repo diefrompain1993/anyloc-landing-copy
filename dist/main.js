@@ -23,12 +23,23 @@ const edges=[[0,1],[1,2],[2,4],[4,3],[3,6],[6,7],[7,4],[4,5],[5,2],[2,0],[0,3],[
 graph.innerHTML=`<defs><filter id="soft-glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="7"/></filter></defs><g>${edges.map(([a,b],i)=>{const A=people[a],B=people[b],d=`M${A[0]} ${A[1]} Q${(A[0]+B[0])/2+20} ${(A[1]+B[1])/2-25} ${B[0]} ${B[1]}`;return `<path class="graph-thread" d="${d}"/><path id="signal-${i}" class="graph-signal" pathLength="1" stroke="${actions[B[7]][1]}" d="${d}"/>`;}).join('')}</g><g>${people.map((p,i)=>{const a=actions[p[7]];return `<g transform="translate(${p[0]} ${p[1]})"><g id="person-${i}" class="graph-person"><circle class="person-glow" r="54" fill="${a[1]}" filter="url(#soft-glow)" opacity="0"/><circle class="person-ring" r="51" fill="none" stroke="${a[1]}" stroke-width="2" opacity="0"/>${portrait(p,i)}<g class="action-badge" transform="translate(24 24)" opacity="0"><rect x="-3" y="-3" width="44" height="44" rx="15" fill="#1e2023"/><rect width="38" height="38" rx="12" fill="${a[1]}"/><g fill="none" stroke="#25302d" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">${a[2]}</g></g></g><text class="person-name" y="77">${p[6]}</text><text class="person-action" id="action-${i}" y="97" fill="${a[1]}">${a[0]}</text></g>`;}).join('')}</g>`;
 const signals=edges.map((_,i)=>graph.querySelector(`#signal-${i}`));
 const nodes=people.map((_,i)=>({body:graph.querySelector(`#person-${i}`),glow:graph.querySelector(`#person-${i} .person-glow`),ring:graph.querySelector(`#person-${i} .person-ring`),badge:graph.querySelector(`#person-${i} .action-badge`),label:graph.querySelector(`#action-${i}`)}));
-// Each arrival advances that person's action, including across loop boundaries.
-const visitsPerPerson=people.map((_,person)=>edges.filter(([,to])=>to===person).length);
-const visitOrder=edges.map(([,to],index)=>edges.slice(0,index).filter(([,target])=>target===to).length);
+// Plan events in order so adjacent signals and repeat visits never reuse an action.
+const plannedActions=[];
+const lastPersonActions=people.map(p=>p[7]);
+const actionCounts=people.map(()=>actions.map(()=>0));
 function actionForEvent(edgeIndex,lap){
- const person=edges[edgeIndex][1];
- return (people[person][7]+visitOrder[edgeIndex]+lap*visitsPerPerson[person])%actions.length;
+ const eventIndex=lap*edges.length+edgeIndex;
+ while(plannedActions.length<=eventIndex){
+  const index=plannedActions.length,[from,to]=edges[index%edges.length];
+  const previous=plannedActions[index-1];
+  const excluded=new Set([previous,lastPersonActions[from],lastPersonActions[to]]);
+  const candidates=actions.map((_,offset)=>(lastPersonActions[to]+1+offset)%actions.length)
+   .filter(action=>!excluded.has(action));
+  // Prefer less-used actions for this person; preserve rotation order on ties.
+  const next=candidates.reduce((best,action)=>actionCounts[to][action]<actionCounts[to][best]?action:best);
+  plannedActions.push(next);lastPersonActions[to]=next;actionCounts[to][next]++;
+ }
+ return plannedActions[eventIndex];
 }
 const shownActions=people.map(p=>p[7]);
 function showAction(person,action){
