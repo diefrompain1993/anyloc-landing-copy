@@ -73,3 +73,13 @@ button.story-link{border:0;padding:0;background:transparent;text-align:left;font
 /* One transparent vector canvas integrates the interface with the section. */
 .mobile-collage{aspect-ratio:680/520}.unified-ios-art{display:block;width:100%;height:auto;user-select:none;pointer-events:none}.mobile-panel{grid-template-columns:.95fr 1.15fr;gap:4%}.mobile-switcher{margin-bottom:48px}.mobile-showcase{padding-bottom:75px}
 @media(max-width:700px){.mobile-panel{grid-template-columns:1fr;gap:12px}.mobile-collage{width:calc(100% + 20px);max-width:none;margin-left:-10px}.mobile-switcher{margin-bottom:35px}}
+/* Feathered colour is rendered by the website, separately from the UI assets. */
+.mobile-collage::before,.mobile-collage::after{content:"";position:absolute;z-index:-1;pointer-events:none;filter:blur(28px);opacity:.8}
+.mobile-collage::before{inset:9% 5% 11% 4%;background:radial-gradient(ellipse at 23% 32%,#a7dcff 0,transparent 53%),radial-gradient(ellipse at 70% 68%,#c4b1ff 0,transparent 57%),radial-gradient(ellipse at 65% 25%,#e3d9ff 0,transparent 52%);border-radius:43% 57% 63% 37% / 36% 39% 61% 64%;transform:rotate(-12deg)}
+.mobile-collage::after{left:24%;right:12%;top:43%;bottom:10%;background:radial-gradient(ellipse at 65% 50%,#f5cddd 0,transparent 64%);border-radius:65% 35% 52% 48% / 51% 65% 35% 49%;transform:rotate(18deg);opacity:.65}
+.mobile-panel[data-mobile-view=scan] .mobile-collage::before{inset:16% 16% 17% 12%;transform:rotate(23deg);opacity:.65}
+.mobile-panel[data-mobile-view=report] .mobile-collage::before{inset:7% 10% 8%;transform:rotate(13deg)}
+.mobile-panel[data-mobile-view=tasks] .mobile-collage::before{inset:12% 12% 10% 9%;transform:rotate(-23deg)}
+.mobile-panel[data-mobile-view=history] .mobile-collage::after{left:8%;right:40%;top:36%;bottom:19%}
+.unified-ios-art{position:relative;z-index:1}
+@media(max-width:700px){.mobile-collage::before,.mobile-collage::after{filter:blur(18px)}}
