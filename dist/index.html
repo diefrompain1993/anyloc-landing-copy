@@ -32,13 +32,15 @@
  <div class="story-panel" id="story-panel" data-story="presence"><div class="story-copy" id="place-detail" aria-live="polite"></div><div class="story-visual" id="story-visual" aria-label="Иллюстрация выбранного сценария"></div></div>
 
 </section>
-<section class="al-journey" id="how" aria-label="Как работает Anyloc">
- <div class="al-journey-pin al-pad">
-  <div class="al-journey-copy"><h2>Работа на объекте<br><em>в мобильном<br>приложении</em></h2><p class="al-journey-summary">Отмечайте время и отправляйте отчёты<br>со своего телефона.</p>
-   <div class="al-step-controls" role="tablist" aria-label="Этапы работы"><button id="step-tab-0" role="tab" aria-selected="true" aria-controls="phone-step-0" data-step="0"><span>01</span><div><b>Отметьтесь</b><p>Приложите телефон к метке на объекте.</p></div></button><button id="step-tab-1" role="tab" aria-selected="false" aria-controls="phone-step-1" tabindex="-1" data-step="1"><span>02</span><div><b>Отправьте отчёт</b><p>Опишите работу, добавьте фото или файл.</p></div></button><button id="step-tab-2" role="tab" aria-selected="false" aria-controls="phone-step-2" tabindex="-1" data-step="2"><span>03</span><div><b>Посмотрите историю</b><p>Отметки и отчёты сохраняются в приложении.</p></div></button></div>
-  </div>
-  <div id="phone-mount"></div>
+<section class="mobile-showcase" id="how" aria-label="Возможности мобильного приложения">
+ <div class="mobile-switcher" role="tablist" aria-label="Разделы приложения">
+  <button id="mobile-tab-objects" role="tab" aria-selected="true" aria-controls="mobile-panel" data-mobile="objects">Объекты</button>
+  <button id="mobile-tab-scan" role="tab" aria-selected="false" aria-controls="mobile-panel" tabindex="-1" data-mobile="scan">NFC-отметки</button>
+  <button id="mobile-tab-report" role="tab" aria-selected="false" aria-controls="mobile-panel" tabindex="-1" data-mobile="report">Отчёты</button>
+  <button id="mobile-tab-tasks" role="tab" aria-selected="false" aria-controls="mobile-panel" tabindex="-1" data-mobile="tasks">Задачи</button>
+  <button id="mobile-tab-history" role="tab" aria-selected="false" aria-controls="mobile-panel" tabindex="-1" data-mobile="history">История</button>
  </div>
+ <div class="mobile-panel" id="mobile-panel" role="tabpanel" aria-labelledby="mobile-tab-objects" tabindex="0"><div class="mobile-copy" id="mobile-copy"></div><div class="mobile-collage" id="mobile-collage"></div></div>
 </section>
 <section class="team-space" id="features" aria-labelledby="space-heading">
  <div class="space-heading"><div><h2 id="space-heading">Журналы и настройки<br><em>для вашей команды</em></h2></div><p>Настраивайте доступ сотрудников и NFC-метки,<br>просматривайте историю работ<br>и выгружайте данные для расчётов.</p></div>

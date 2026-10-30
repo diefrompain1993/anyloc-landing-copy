@@ -1,9 +1,6 @@
-import {phoneMarkup, adminView, bindProductUI, detailView} from './product-ui.js';
-document.querySelector('#phone-mount').outerHTML=phoneMarkup();
-document.querySelectorAll('[data-live-card]').forEach(el=>el.innerHTML=adminView(el.dataset.liveCard));
+import {bindProductUI, detailView} from './product-ui.js';
 const world = document.querySelector('.al-world');
 const quiet = matchMedia('(prefers-reduced-motion: reduce)');
-const desktopStory = matchMedia('(min-width: 701px)');
 world.classList.add('al-motion');
 const revealObserver = new IntersectionObserver(entries => {
   entries.forEach(entry => { if(entry.isIntersecting) {entry.target.classList.add('is-visible'); revealObserver.unobserve(entry.target);} });
@@ -28,54 +25,35 @@ function setStory(key,animate=true){
 document.querySelectorAll('[data-place]').forEach(b=>b.addEventListener('click',()=>setStory(b.dataset.place)));
 setStory('presence',false);
 
-const journey=document.querySelector('.al-journey');
-const scene=document.querySelector('.al-phone-scene');
-const steps=[...document.querySelectorAll('[data-step]')];
-const pages=[...document.querySelectorAll('.al-phone-page')];
-let currentStep=0, previousScrollStep=-1;
-function setStep(index) {
- document.querySelector('.ios-aux')?.setAttribute('hidden','');
- if(index===currentStep) return;
- currentStep=index;
- scene.dataset.stepView=String(index);
- document.querySelector('#phone-receipt').textContent=['Отметка сохранена','Отчёт сохранён','Запись добавлена в историю'][index];
- document.querySelectorAll('[data-ios-nav]').forEach(b=>b.setAttribute('aria-current',String(b.dataset.iosNav===String(index))));
- steps.forEach((button,i)=>{button.setAttribute('aria-selected',String(i===index));button.tabIndex=i===index?0:-1;pages[i].hidden=i!==index;});
+// Static fragments from the supplied iOS screenshots. Only the section switcher is interactive.
+const mobileViews={
+ objects:{title:'Объекты',heading:'Информация об объекте<br>в приложении',text:'Откройте нужный объект, посмотрите адрес, контакты и последние отчёты. Отсюда можно перейти к отправке нового отчёта.',chips:['Список объектов','Контакты','Журнал'],color:'#2768df',bg:'#eaf1ff',first:['objects',100,630,'Список объектов в приложении Anyloc'],second:['object',236,390,'Карточка объекта с адресом, контактами и кнопкой отчёта'],label:'Карточка объекта',stamp:'В приложении',icon:'file'},
+ scan:{title:'NFC-отметки',heading:'Отмечайте приход и уход<br>с помощью телефона',text:'Поднесите телефон к NFC-метке на объекте. Сохранённую отметку можно проверить в истории вместе с временем входа или выхода.',chips:['Сканирование NFC','Вход и выход'],color:'#7550d8',bg:'#f0eaff',first:['scan',430,450,'Поиск NFC-метки в приложении'],second:['history',430,305,'Записи о входе и выходе в истории'],label:'Отметка в истории',stamp:'NFC',icon:'nfc'},
+ report:{title:'Отчёты',heading:'Отправляйте отчёты<br>с места работы',text:'Опишите выполненную работу и приложите фотографии или файлы. Отправленные отчёты сохраняются в журнале объекта.',chips:['Описание работы','Фото и файлы'],color:'#2768df',bg:'#eaf1ff',first:['report',237,820,'Форма отчёта с полем описания, вложениями и кнопкой отправки'],second:['object',660,385,'Последние отчёты в карточке объекта'],label:'Журнал объекта',stamp:'Отчёт',icon:'file'},
+ tasks:{title:'Задачи',heading:'Проверяйте задачи<br>и сроки выполнения',text:'В приложении видны назначенные работы и сроки. Выполненные задачи остаются в списке с отметкой о завершении.',chips:['Назначенные работы','Сроки','Статусы'],color:'#bc7a00',bg:'#fff1cd',first:['tasks',100,375,'Открытые задачи с датами выполнения'],second:['tasks',475,290,'Выполненные задачи с отметками'],label:'Выполненные работы',stamp:'Задачи',icon:'check'},
+ history:{title:'История',heading:'Просматривайте отметки<br>и рабочее время',text:'Проверьте рабочие часы за неделю, время входа и выхода, а также отправленные отчёты. Записи в истории сгруппированы по дням.',chips:['Рабочие часы','Отметки','Отчёты'],color:'#348269',bg:'#e4f2eb',first:['history',100,310,'Рабочие часы за неделю в приложении'],second:['history',430,620,'История входов, выходов и отправленных отчётов'],label:'Записи по дням',stamp:'История',icon:'file'}
+};
+function screenshotFragment(data,position){
+ const [file,y,height,alt]=data;
+ return `<figure class="mobile-fragment ${position}" style="--fragment-ratio:588 / ${height};--image-shift:${-y/1280*100}%"><img src="assets/ios/${file}.png" width="588" height="1280" alt="${alt}" draggable="false"></figure>`;
 }
-steps.forEach((button,index)=>{
- button.addEventListener('click',()=>setStep(index));
- button.addEventListener('keydown',event=>{
-  let next;
-  if(event.key==='ArrowDown'||event.key==='ArrowRight')next=(index+1)%3;
-  else if(event.key==='ArrowUp'||event.key==='ArrowLeft')next=(index+2)%3;
-  else if(event.key==='Home')next=0;
-  else if(event.key==='End')next=2;
-  else return;
-  event.preventDefault();setStep(next);steps[next].focus();
- });
+const mobileTabs=[...document.querySelectorAll('[data-mobile]')];
+let activeMobile;
+function setMobile(key,animate=true){
+ if(activeMobile===key)return;activeMobile=key;
+ const d=mobileViews[key],panel=document.querySelector('#mobile-panel'),art=document.querySelector('#mobile-collage');
+ mobileTabs.forEach(b=>{const selected=b.dataset.mobile===key;b.setAttribute('aria-selected',String(selected));b.tabIndex=selected?0:-1;});
+ panel.setAttribute('aria-labelledby',`mobile-tab-${key}`);panel.dataset.mobileView=key;
+ panel.style.setProperty('--mobile-accent',d.color);panel.style.setProperty('--mobile-tint',d.bg);
+ document.querySelector('#mobile-copy').innerHTML=`<div class="mobile-product"><img src="assets/favicon.png" width="32" height="32" alt=""><strong>Anyloc</strong><span>${d.title}</span></div><div class="mobile-capabilities">${d.chips.map(c=>`<span>${c}</span>`).join('')}</div><h2>${d.heading}</h2><p>${d.text}</p><a href="https://app.anyloc.ru" target="_blank" rel="noopener noreferrer" class="mobile-link">Открыть Anyloc <span>→</span></a>`;
+ art.innerHTML=`<div class="collage-grid"></div><svg class="collage-arrows" viewBox="0 0 640 540" aria-hidden="true"><path d="M235 220C325 206 300 325 370 320m-15-13 17 13-19 9"/><path d="M245 222C328 208 302 328 368 322"/></svg>${screenshotFragment(d.first,'fragment-primary')}${screenshotFragment(d.second,'fragment-secondary')}<span class="collage-label">${d.label}<i></i></span><span class="collage-stamp">${storyIcon(d.icon)}${d.stamp}</span>`;
+ if(animate&&!quiet.matches){panel.getAnimations().forEach(a=>a.cancel());panel.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:380,easing:'cubic-bezier(.22,1,.36,1)'});}
+}
+mobileTabs.forEach((button,index)=>{
+ button.addEventListener('click',()=>setMobile(button.dataset.mobile));
+ button.addEventListener('keydown',e=>{let next;if(e.key==='ArrowRight')next=(index+1)%mobileTabs.length;else if(e.key==='ArrowLeft')next=(index+mobileTabs.length-1)%mobileTabs.length;else if(e.key==='Home')next=0;else if(e.key==='End')next=mobileTabs.length-1;else return;e.preventDefault();setMobile(mobileTabs[next].dataset.mobile);mobileTabs[next].focus();});
 });
-
-const parallaxes=[...world.querySelectorAll('[data-parallax]')];
-let pendingFrame=0;
-const clamp=value=>Math.max(0,Math.min(1,value));
-function draw() {
- pendingFrame=0;
- if(quiet.matches)return;
- const viewport=innerHeight;
- const rect=journey.getBoundingClientRect();
- if(journey.dataset.scrollStory==='true'&&desktopStory.matches&&rect.bottom>0&&rect.top<viewport){
-  const progress=clamp(-rect.top/Math.max(1,journey.offsetHeight-viewport));
-  const step=Math.min(2,Math.floor(progress*3));
-  if(step!==previousScrollStep){previousScrollStep=step;setStep(step);}
-  scene.style.setProperty('--receipt-y',`${(progress-.5)*-22}px`);
- }
- parallaxes.forEach(element=>{
-  const bounds=element.getBoundingClientRect();
-  if(bounds.bottom>0&&bounds.top<viewport){const progress=clamp((viewport-bounds.top)/(viewport+bounds.height));element.style.setProperty('--scene-y',`${(progress-.5)*48}px`);}
- });
-}
-function schedule(){if(!pendingFrame)pendingFrame=requestAnimationFrame(draw);}
-addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule);quiet.addEventListener('change',schedule);schedule();
+setMobile('objects',false);
 
 const preview=document.querySelector('#interface-preview');
 let previousFocus;
@@ -85,7 +63,7 @@ function openUI(key,value){
  document.querySelector('#preview-content').innerHTML=detailView(key,value);
  if(!preview.open)preview.showModal();
 }
-bindProductUI(world,{open:openUI,step:setStep});
+bindProductUI(world,{open:openUI,step:()=>{}});
 preview.querySelector('[data-close-preview]').addEventListener('click',()=>preview.close());
 preview.addEventListener('click',event=>{if(event.target===preview)preview.close();});
 preview.addEventListener('close',()=>previousFocus?.focus({preventScroll:true}));
