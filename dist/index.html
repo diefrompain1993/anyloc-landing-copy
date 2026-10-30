@@ -44,17 +44,31 @@
  </div>
  <div class="mobile-panel" id="mobile-panel" role="tabpanel" aria-labelledby="mobile-tab-objects" tabindex="0"><div class="mobile-copy" id="mobile-copy"></div><div class="mobile-collage" id="mobile-collage"></div></div>
 </section>
-<section class="team-workspace" id="features" aria-labelledby="space-heading">
- <div class="workspace-intro"><h2 id="space-heading">Управляйте работой<br><em>на ваших объектах</em></h2><p>Отчёты, доступ сотрудников, NFC-метки и выгрузки — в веб-панели Anyloc.</p></div>
- <div class="workspace-shell" id="team-preview">
- <div class="workspace-top"><span class="workspace-brand"><img src="assets/favicon.png" alt="" width="26" height="26">Anyloc <span>/</span> БЦ Орион</span><span class="workspace-example">Пример объекта</span></div>
- <div class="workspace-tabs" role="tablist" aria-label="Возможности команды">
- <button id="feature-journal" role="tab" data-feature="journal" aria-selected="true" aria-controls="space-stage"><span>01</span>Журнал работ</button>
- <button id="feature-access" role="tab" data-feature="access" aria-selected="false" aria-controls="space-stage" tabindex="-1"><span>02</span>Доступ команды</button>
- <button id="feature-tags" role="tab" data-feature="tags" aria-selected="false" aria-controls="space-stage" tabindex="-1"><span>03</span>NFC-метки</button>
- <button id="feature-export" role="tab" data-feature="export" aria-selected="false" aria-controls="space-stage" tabindex="-1"><span>04</span>Выгрузка данных</button>
- </div>
- <div class="workspace-body" id="space-stage" role="tabpanel" aria-labelledby="feature-journal" tabindex="0"></div>
+<section class="feature-gallery" id="features" aria-labelledby="space-heading">
+ <div class="gallery-heading"><h2 id="space-heading">Журналы и настройки<br><em>для вашей команды</em></h2><p>Сохраняйте результаты работ, управляйте доступом и настраивайте Anyloc под свои объекты.</p></div>
+ <div class="gallery-grid">
+ <article class="gallery-card gallery-journal">
+  <div class="gallery-copy"><h3>Вся история объекта<br>в одном журнале</h3><p>Отчёты сотрудников, фотографии и комментарии сохраняются вместе.</p></div>
+  <img class="gallery-folder" src="assets/report-folder.png" alt="Объёмная папка с отчётами и фотографией" loading="lazy">
+  <div class="gallery-journal-note"><span class="gallery-note-icon" data-gallery-icon="file"></span><div><b>Проверка вентиляции</b><small>Михаил Крылов · 10:24</small></div><span class="gallery-note-check" data-gallery-icon="check"></span></div>
+ </article>
+ <article class="gallery-card gallery-access">
+  <div class="gallery-copy"><h3>Каждому — свой доступ</h3><p>Разделяйте права сотрудников, подрядчиков и руководителей.</p></div>
+  <div class="gallery-team"><div class="gallery-team-object"><span data-gallery-icon="check"></span>БЦ Орион</div><div class="gallery-team-lines" aria-hidden="true"></div>
+   <div class="gallery-people" role="group" aria-label="Пример прав по роли"><button data-gallery-role="lead" aria-pressed="true"><span class="gallery-person" data-avatar="4"></span><b>Руководитель</b></button><button data-gallery-role="partner" aria-pressed="false"><span class="gallery-person" data-avatar="1"></span><b>Подрядчик</b></button><button data-gallery-role="worker" aria-pressed="false"><span class="gallery-person" data-avatar="0"></span><b>Сотрудник</b></button></div>
+  </div>
+  <p class="gallery-role-note" id="gallery-role-note" aria-live="polite">Просмотр работы команды на доступных объектах</p>
+ </article>
+ <article class="gallery-card gallery-nfc">
+  <div class="gallery-copy"><h3>Настройте действие<br>по касанию</h3><p>Присутствие или журнал работ — выберите назначение NFC-метки.</p></div>
+  <div class="gallery-tag" aria-hidden="true"><i></i><i></i><div class="gallery-tag-outline"><span></span><b>Anyloc</b></div></div>
+  <div class="gallery-tag-options" role="group" aria-label="Назначение метки"><button data-gallery-tag="presence" aria-pressed="true"><span data-gallery-icon="check"></span>Присутствие<i></i></button><button data-gallery-tag="journal" aria-pressed="false"><span data-gallery-icon="file"></span>Журнал работ<i></i></button><p id="gallery-tag-result" aria-live="polite">Сохранится время<br>прихода или ухода</p></div>
+ </article>
+ <article class="gallery-card gallery-export">
+  <div class="gallery-copy"><h3>Данные готовы<br>к дальнейшей работе</h3><p>Выгружайте записи для расчётов, сверок или обработки в других системах.</p></div>
+  <div class="gallery-files" role="group" aria-label="Формат выгрузки"><button class="gallery-file file-excel" data-gallery-format="Excel" aria-pressed="true"><span class="file-corner"></span><span class="gallery-file-mark">X</span><b>Excel</b><span class="gallery-file-lines"></span></button><button class="gallery-file file-csv" data-gallery-format="CSV" aria-pressed="false"><span class="file-corner"></span><span class="gallery-file-mark">≡</span><b>CSV</b><span class="gallery-file-lines"></span></button><button class="gallery-file file-json" data-gallery-format="JSON" aria-pressed="false"><span class="file-corner"></span><span class="gallery-file-mark">{ }</span><b>JSON</b><span class="gallery-file-lines"></span></button></div>
+  <p class="gallery-format-note" id="gallery-format-note" aria-live="polite">Excel — таблица для расчётов и сверок</p>
+ </article>
  </div>
 </section>
 <section class="al-faq al-pad" id="questions"><div class="al-faq-intro"><h2>Остались<br><em>вопросы?</em></h2><div class="al-faq-visual" aria-hidden="true"><span>(</span><i></i><span>)</span></div></div><div class="faq-list"><details open><summary>Что понадобится для работы?<span>+</span></summary><p>Понадобятся NFC-метка на объекте, смартфон с поддержкой NFC и приложение Anyloc. Руководитель работает в веб-панели. Администратор добавляет объекты и сотрудников, настраивает доступ.</p></details><details><summary>Что происходит, если нет интернета?<span>+</span></summary><p>Приложение сохраняет NFC-отметки без интернета и отправляет их, когда связь восстановится. В веб-панели они появятся после синхронизации и проверки. Работа без сети зависит от устройства и настроек.</p></details><details><summary>Можно работать с несколькими подрядчиками?<span>+</span></summary><p>Да. Добавьте подрядные организации и их сотрудников. В панели можно посмотреть работу всех подрядчиков или данные по одному из них.</p></details><details><summary>Чем отличаются метки посещения и журнала?<span>+</span></summary><p>Метка посещения нужна для учёта прихода и ухода. Метка журнала — для отправки отчётов о работе. При настройке укажите назначение метки и объект, к которому она относится.</p></details></div></section>
