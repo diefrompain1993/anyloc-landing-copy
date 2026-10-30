@@ -52,3 +52,14 @@
 @media(prefers-reduced-motion:reduce){.feature-copy>span,.space-controls>button,.role-face{transition:none}}
 
 button.story-link{border:0;padding:0;background:transparent;text-align:left;font-family:inherit;cursor:pointer}
+
+/* Text contrast for the light sections; the graph retains its dark palette. */
+.al-journey{color:#202c40}.al-journey-copy h2{color:#202c40}.al-journey-summary{color:#52617a}
+.al-step-controls button{color:#596981;border-top-color:#cbd5e2}.al-step-controls button[aria-selected=true]{color:#205dcc}.al-step-controls button[aria-selected=true]>span{color:#205dcc}.al-step-controls button[aria-selected=true] p{color:#52617a}
+.al-phone-caption,.al-floating-receipt small{color:#53637b}.al-floating-receipt{color:#202c40}
+.hero-event small,.story-receipt small,.visual-caption,.stories-heading .eyebrow,.story-tabs button span{color:#56667c}
+.space-canvas-title,.history-head small,.history-event time,.history-event div>span,.history-preview>span,.canvas-hint,.export-note{color:#52647b}
+.scope-label,.scope-pill,.access-root>span,.access-scope p{color:#635075}.tag-config-card .scope-label,.tag-config-card p,.new-nfc-tag small{color:#536641}
+.report-sheet p,.sheet-overline{color:#625471}.clean-note>span:not(.sheet-overline){color:#536641}
+.feature-number,.feature-arrow{color:#60728b}.space-float{color:#435674}.format-options button,.export-source small{color:#4e6971}
+.al-finale-bottom{justify-content:flex-end}.connection-intro{padding-bottom:75px}.people-network{padding-bottom:55px}

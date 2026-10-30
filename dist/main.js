@@ -40,7 +40,7 @@ function showAction(person,action){
  n.badge.querySelector('g').innerHTML=a[2];
  n.label.textContent=a[0];n.label.setAttribute('fill',a[1]);
 }
-const quiet=matchMedia('(prefers-reduced-motion: reduce)'),toggle=document.querySelector('#motion-toggle');
+const quiet=matchMedia('(prefers-reduced-motion: reduce)');
 let paused=quiet.matches,visible=false,frame=0,last=0,clock=0;
 const stagger=2100,travel=1650,cycle=edges.length*stagger,clamp=x=>Math.min(1,Math.max(0,x)),smooth=x=>x*x*(3-2*x);
 function render(){
@@ -63,6 +63,6 @@ function render(){
  nodes.forEach((n,i)=>{const t=quiet.matches?1:activation[i];n.glow.setAttribute('opacity',String(t*.32));n.ring.setAttribute('opacity',String(t*.8));n.body.setAttribute('transform',`scale(${1+t*.045})`);const pop=1+Math.sin(t*Math.PI)*.13;n.badge.setAttribute('opacity',String(t));n.badge.setAttribute('transform',`translate(24 ${24+(1-t)*9}) scale(${(.72+.28*t)*pop})`);n.label.setAttribute('opacity',String(t));});
 }
 function tick(now){frame=0;if(paused||!visible||document.hidden)return;if(last)clock+=Math.min(now-last,80);last=now;render();frame=requestAnimationFrame(tick);}
-function sync(){cancelAnimationFrame(frame);frame=0;last=0;document.querySelector('.hero-art').classList.toggle('motion-paused',paused||document.hidden);toggle.setAttribute('aria-pressed',String(paused));toggle.textContent=paused?'▶  Продолжить анимацию':'Ⅱ  Пауза анимации';if(!paused&&visible&&!document.hidden)frame=requestAnimationFrame(tick);}
+function sync(){cancelAnimationFrame(frame);frame=0;last=0;document.querySelector('.hero-art').classList.toggle('motion-paused',paused||document.hidden);if(!paused&&visible&&!document.hidden)frame=requestAnimationFrame(tick);}
 new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;sync();},{threshold:.05}).observe(graph);
-toggle.addEventListener('click',()=>{paused=!paused;sync();});quiet.addEventListener('change',()=>{paused=quiet.matches;render();sync();});document.addEventListener('visibilitychange',sync);render();sync();
+quiet.addEventListener('change',()=>{paused=quiet.matches;render();sync();});document.addEventListener('visibilitychange',sync);render();sync();
