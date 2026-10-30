@@ -33,10 +33,6 @@ const mobileViews={
  tasks:{title:'Задачи',heading:'Проверяйте задачи<br>и сроки выполнения',text:'В приложении видны назначенные работы и сроки. Выполненные задачи остаются в списке с отметкой о завершении.',chips:['Назначенные работы','Сроки','Статусы'],color:'#bc7a00',bg:'#fff1cd',first:['tasks',100,375,'Открытые задачи с датами выполнения'],second:['tasks',475,290,'Выполненные задачи с отметками'],label:'Выполненные работы',stamp:'Задачи',icon:'check'},
  history:{title:'История',heading:'Просматривайте отметки<br>и рабочее время',text:'Проверьте рабочие часы за неделю, время входа и выхода, а также отправленные отчёты. Записи в истории сгруппированы по дням.',chips:['Рабочие часы','Отметки','Отчёты'],color:'#348269',bg:'#e4f2eb',first:['history',100,310,'Рабочие часы за неделю в приложении'],second:['history',430,620,'История входов, выходов и отправленных отчётов'],label:'Записи по дням',stamp:'История',icon:'file'}
 };
-function screenshotFragment(data,position){
- const [file,y,height,alt]=data;
- return `<figure class="mobile-fragment ${position}" style="--fragment-ratio:588 / ${height};--image-shift:${-y/1280*100}%"><img src="assets/ios/${file}.png" width="588" height="1280" alt="${alt}" draggable="false"></figure>`;
-}
 const mobileTabs=[...document.querySelectorAll('[data-mobile]')];
 let activeMobile;
 function setMobile(key,animate=true){
@@ -46,7 +42,7 @@ function setMobile(key,animate=true){
  panel.setAttribute('aria-labelledby',`mobile-tab-${key}`);panel.dataset.mobileView=key;
  panel.style.setProperty('--mobile-accent',d.color);panel.style.setProperty('--mobile-tint',d.bg);
  document.querySelector('#mobile-copy').innerHTML=`<div class="mobile-product"><img src="assets/favicon.png" width="32" height="32" alt=""><strong>Anyloc</strong><span>${d.title}</span></div><div class="mobile-capabilities">${d.chips.map(c=>`<span>${c}</span>`).join('')}</div><h2>${d.heading}</h2><p>${d.text}</p><a href="https://app.anyloc.ru" target="_blank" rel="noopener noreferrer" class="mobile-link">Открыть Anyloc <span>→</span></a>`;
- art.innerHTML=`<div class="collage-grid"></div><svg class="collage-arrows" viewBox="0 0 640 540" aria-hidden="true"><path d="M235 220C325 206 300 325 370 320m-15-13 17 13-19 9"/><path d="M245 222C328 208 302 328 368 322"/></svg>${screenshotFragment(d.first,'fragment-primary')}${screenshotFragment(d.second,'fragment-secondary')}<span class="collage-label">${d.label}<i></i></span><span class="collage-stamp">${storyIcon(d.icon)}${d.stamp}</span>`;
+ art.innerHTML=`<img class="unified-ios-art" src="assets/ios/showcase-${key}.svg" width="680" height="520" alt="${d.first[3]}. ${d.second[3]}." draggable="false">`;
  if(animate&&!quiet.matches){panel.getAnimations().forEach(a=>a.cancel());panel.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:380,easing:'cubic-bezier(.22,1,.36,1)'});}
 }
 mobileTabs.forEach((button,index)=>{

@@ -70,3 +70,6 @@ button.story-link{border:0;padding:0;background:transparent;text-align:left;font
 @media(prefers-reduced-motion:reduce){.mobile-switcher button,.mobile-link span{transition:none}}
 
 @media(max-width:700px){.mobile-switcher{gap:0}.mobile-switcher button{flex:1 0 auto;font-size:10px;padding:10px 7px}}
+/* One transparent vector canvas integrates the interface with the section. */
+.mobile-collage{aspect-ratio:680/520}.unified-ios-art{display:block;width:100%;height:auto;user-select:none;pointer-events:none}.mobile-panel{grid-template-columns:.95fr 1.15fr;gap:4%}.mobile-switcher{margin-bottom:48px}.mobile-showcase{padding-bottom:75px}
+@media(max-width:700px){.mobile-panel{grid-template-columns:1fr;gap:12px}.mobile-collage{width:calc(100% + 20px);max-width:none;margin-left:-10px}.mobile-switcher{margin-bottom:35px}}
