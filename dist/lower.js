@@ -114,26 +114,27 @@ preview.querySelector('[data-close-preview]').addEventListener('click',()=>previ
 preview.addEventListener('click',event=>{if(event.target===preview)preview.close();});
 preview.addEventListener('close',()=>previousFocus?.focus({preventScroll:true}));
 
-// Swap the front card with the selected slot, keeping all three slots occupied.
-const paperStack=document.querySelector('.al-paper-stack');
-function updatePaperAccess(){
- paperStack.querySelectorAll('.al-paper').forEach(card=>{
-  const front=card.classList.contains('al-paper-front');
-  card.querySelector('.al-paper-viewport').inert=!front;
-  const button=card.querySelector('.al-paper-label');
-  const title=button.childNodes[0].textContent.trim();
-  button.setAttribute('aria-label',front?'Открыть: '+title:'Показать карточку: '+title);
- });
+// Feature explorer: one shared canvas, four distinct stories.
+const featureViews={
+ journal:()=>`<div class="space-canvas-title"><span>ЖУРНАЛ ОБЪЕКТА</span><span>БЦ Орион ↗</span></div><div class="history-orbit"></div><div class="history-card"><div class="history-head"><span class="space-icon">${storyIcon('file')}</span><div><b>Всё складывается в историю</b><small>Сегодня · БЦ Орион</small></div></div><div class="history-event"><time>09:41</time><i class="event-green"></i><div><b>Алексей на объекте</b><span>Отметка через NFC</span></div>${storyIcon('check')}</div><div class="history-event"><time>10:24</time><i class="event-blue"></i><div><b>Оборудование проверено</b><span>Отчёт и две фотографии</span></div>${storyIcon('file')}</div><div class="history-preview"><img src="assets/technical-room.png" alt="Техническое помещение"><span>«Осмотр завершён.<br>Отклонений не выявлено»</span></div><button class="space-action" data-open-ui="journal">Открыть журнал <span>→</span></button></div><div class="space-float float-comment"><span>↳</span> Детали не теряются</div><div class="space-float float-photo">${storyIcon('camera')} Фото приложены</div>`,
+ access:()=>`<div class="space-canvas-title"><span>ВАША КОМАНДА</span><span>Доступ по ролям</span></div><div class="access-map"><div class="access-root"><img src="assets/anyloc-logo.png" alt="Anyloc"><span>Общее пространство</span></div><div class="access-connectors"></div><div class="access-roles"><button data-role-view="lead" aria-pressed="true"><span class="role-face">АК</span><b>Руководитель</b></button><button data-role-view="partner" aria-pressed="false"><span class="role-face">МВ</span><b>Подрядчик</b></button><button data-role-view="worker" aria-pressed="false"><span class="role-face">ДС</span><b>Сотрудник</b></button></div><div class="access-scope" id="access-scope"><span class="scope-label">РУКОВОДИТЕЛЬ</span><h3>Общая картина работы</h3><p>Просматривает объекты, отчёты и работу команды в пределах выданных прав.</p><span class="scope-pill">Объекты</span><span class="scope-pill">Команда</span><span class="scope-pill">Отчёты</span></div></div><span class="canvas-hint">Выберите роль и посмотрите её возможности</span>`,
+ tags:()=>`<div class="space-canvas-title"><span>NFC-МЕТКИ</span><span>Одно касание</span></div><div class="tag-config"><div class="new-nfc-tag"><span class="tag-dot"></span>${storyIcon('nfc')}<b>Anyloc</b><small id="tag-purpose">ПРИСУТСТВИЕ</small></div><div class="tag-config-card"><span class="scope-label">ЧТО ПРОИЗОЙДЁТ ПРИ КАСАНИИ?</span><div class="tag-options"><button data-tag-view="presence" aria-pressed="true">${storyIcon('check')} Отметить приход</button><button data-tag-view="journal" aria-pressed="false">${storyIcon('file')} Открыть журнал</button></div><p id="tag-explanation">Метка помогает сотруднику отметить начало или окончание работы на объекте.</p></div></div><span class="canvas-hint">Одна метка — выбранный рабочий сценарий</span>`,
+ export:()=>`<div class="space-canvas-title"><span>ЭКСПОРТ ДАННЫХ</span><span>За нужный период</span></div><div class="export-scene"><div class="export-source"><span class="space-icon">${storyIcon('file')}</span><b>История работы</b><small>Отметки · объекты · сотрудники</small><div class="export-lines"><i></i><i></i><i></i></div></div><div class="export-flow">↓</div><div class="format-options" role="group" aria-label="Пример формата данных"><button data-format-view="Excel" aria-pressed="true"><span>X</span>Excel</button><button data-format-view="CSV" aria-pressed="false"><span>≡</span>CSV</button><button data-format-view="JSON" aria-pressed="false"><span>{ }</span>JSON</button></div><p id="format-description">Таблица для расчётов и сверок в Excel.</p><span class="export-note">Формат выбирается при выгрузке в Anyloc</span></div>`
+};
+const featureStage=document.querySelector('#space-stage');
+function setFeature(key){
+ document.querySelectorAll('[data-feature]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.feature===key)));
+ featureStage.dataset.featureView=key;featureStage.innerHTML=featureViews[key]();
+ if(!quiet.matches)featureStage.animate([{opacity:.15,transform:'translateY(9px)'},{opacity:1,transform:'translateY(0)'}],{duration:420,easing:'cubic-bezier(.22,1,.36,1)'});
 }
-paperStack.addEventListener('click',event=>{
- const card=event.target.closest('.al-paper');
- if(!card||card.classList.contains('al-paper-front'))return;
- event.preventDefault();event.stopPropagation();
- const front=paperStack.querySelector('.al-paper-front');
- const slot=card.classList.contains('al-paper-back')?'al-paper-back':'al-paper-middle';
- front.classList.replace('al-paper-front',slot);
- card.classList.replace(slot,'al-paper-front');
- updatePaperAccess();
- card.querySelector('.al-paper-label').focus({preventScroll:true});
-},true);
-updatePaperAccess();
+document.querySelectorAll('[data-feature]').forEach(b=>b.addEventListener('click',()=>setFeature(b.dataset.feature)));
+featureStage.addEventListener('click',e=>{
+ const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.roleView){
+  const roles={lead:['РУКОВОДИТЕЛЬ','Общая картина работы','Просматривает объекты, отчёты и работу команды в пределах выданных прав.',['Объекты','Команда','Отчёты']],partner:['ПОДРЯДЧИК','Своя команда и объекты','Работает с назначенными объектами и сотрудниками своей организации.',['Свои объекты','Сотрудники','Работы']],worker:['СОТРУДНИК','Всё для работы на месте','Отмечает присутствие, выполняет назначенные задачи и отправляет отчёты.',['Отметки','Мои задачи','Мои отчёты']]};
+  const r=roles[b.dataset.roleView];featureStage.querySelectorAll('[data-role-view]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));document.querySelector('#access-scope').innerHTML=`<span class="scope-label">${r[0]}</span><h3>${r[1]}</h3><p>${r[2]}</p>${r[3].map(t=>`<span class="scope-pill">${t}</span>`).join('')}`;
+ }
+ if(b.dataset.tagView){const journal=b.dataset.tagView==='journal';featureStage.querySelectorAll('[data-tag-view]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));document.querySelector('#tag-purpose').textContent=journal?'ЖУРНАЛ':'ПРИСУТСТВИЕ';document.querySelector('#tag-explanation').textContent=journal?'Метка открывает журнал объекта для отправки отчёта о выполненной работе.':'Метка помогает сотруднику отметить начало или окончание работы на объекте.';}
+ if(b.dataset.formatView){featureStage.querySelectorAll('[data-format-view]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));document.querySelector('#format-description').textContent=({Excel:'Таблица для расчётов и сверок в Excel.',CSV:'Строки данных для импорта в таблицы и другие системы.',JSON:'Структурированные данные для дальнейшей обработки.'})[b.dataset.formatView];}
+});
+setFeature('journal');
