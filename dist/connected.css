@@ -170,3 +170,5 @@ button.story-link{border:0;padding:0;background:transparent;text-align:left;font
 @media(max-width:1050px){.al-finale{gap:15px;padding:45px 5% 85px;min-height:480px}.finale-tag{height:350px}.finale-tag canvas{height:310px}.al-finale h2{font-size:38px}}
 @media(max-width:700px){.al-finale{grid-template-columns:1fr;gap:15px;padding:48px 6% 75px}.al-finale .al-finale-content{text-align:center}.al-finale h2{font-size:34px}.finale-tag{height:330px;max-width:360px}.finale-tag canvas{height:295px}.tag-controls{font-size:10px}.tag-shadow{bottom:43px}}
 @media(prefers-reduced-motion:reduce){.finale-tag canvas,.tag-reset{transition:none}}
+/* Keep navigation centered even without a right-hand CTA. */
+@media(min-width:901px){.header,.header.is-past-intro{display:grid;grid-template-columns:minmax(144px,1fr) auto minmax(144px,1fr)}.header .brand{justify-self:start}.header nav{grid-column:2;justify-self:center}}
