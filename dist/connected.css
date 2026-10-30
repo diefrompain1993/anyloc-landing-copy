@@ -83,3 +83,7 @@ button.story-link{border:0;padding:0;background:transparent;text-align:left;font
 .mobile-panel[data-mobile-view=history] .mobile-collage::after{left:8%;right:40%;top:36%;bottom:19%}
 .unified-ios-art{position:relative;z-index:1}
 @media(max-width:700px){.mobile-collage::before,.mobile-collage::after{filter:blur(18px)}}
+/* Keep the product illustration secondary to the section copy. */
+.mobile-collage{width:76%;max-width:560px;justify-self:center;margin:0}
+@media(min-width:1051px){.mobile-panel{min-height:460px}}
+@media(max-width:700px){.mobile-collage{width:100%;max-width:440px;justify-self:center;margin:0 auto}}
