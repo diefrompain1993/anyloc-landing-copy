@@ -1,7 +1,6 @@
 // Original physical NFC plate, restored from the first landing design.
 const stage=document.querySelector('#finale-tag');
 const canvas=stage.querySelector('canvas');
-const reset=stage.querySelector('.tag-reset');
 let visible=false,started=false;
 const observer=new IntersectionObserver(entries=>{
  visible=entries[0].isIntersecting;
@@ -116,7 +115,6 @@ async function initPlate(){
  function release(e){if(drag&&e.pointerId===drag.id){drag=null;canvas.classList.remove('is-dragging');}}
  canvas.addEventListener('pointerup',release);canvas.addEventListener('pointercancel',release);canvas.addEventListener('lostpointercapture',release);
  function restore(){targetX=home.x;targetY=home.y;dirty=true;requestFrame();}
- reset.addEventListener('click',restore);
  canvas.addEventListener('keydown',e=>{
   if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home'].includes(e.key))return;
   e.preventDefault();if(e.key==='Home'){restore();return;}
