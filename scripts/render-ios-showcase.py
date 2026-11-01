@@ -57,13 +57,13 @@ def save(key,s):
  (out/f'showcase-{key}.svg').write_text(svg,encoding='utf-8')
 
 # Objects: tall directory behind a broad, overlapping object detail sheet.
-s='<g transform="rotate(-3 227 240)">'+card(75,54,286,355)+text(98,91,'Объекты',22,weight=600)
-s+=box(94,109,247,35,'#fff','#eeedf6',13,False)+text(110,131,'Поиск объекта',12,'#9299a6')
-for y,title,addr in [(160,'БЦ Север','Учебная улица, дом 1'),(236,'ЖК Сосновый','Учебная улица, дом 2'),(312,'Офис Центральный','Учебная улица, дом 4')]:
+s='<g transform="rotate(-3 227 240)">'+card(75,54,286,365)+text(98,101,'Объекты',22,weight=600)
+s+=box(94,119,247,35,'#fff','#eeedf6',13,False)+text(110,141,'Поиск объекта',12,'#9299a6')
+for y,title,addr in [(170,'БЦ Север','Учебная улица, дом 1'),(246,'ЖК Сосновый','Учебная улица, дом 2'),(322,'Офис Центральный','Учебная улица, дом 4')]:
  s+=box(94,y,247,65,'#fff','#eeedf6',17,False)+text(111,y+27,title,15,weight=600)+text(111,y+46,addr,10,'#778190')+text(320,y+35,'›',20,'#9397a6')
-s+='</g>'+card(278,207,326,253)+text(302,248,'БЦ Север',24,weight=600)+text(303,275,'Учебная улица, дом 1',12,'#757e8e')
-s+=box(300,296,282,43,'#f1edff','#f1edff',15,False)+text(318,323,'Контакты',14,'#7654e8',500)+text(557,323,'⌄',17,'#7654e8')
-s+=button(300,359,282,'Написать отчёт')+text(304,429,'Отчёты и информация об объекте',11,'#7b8291')
+s+='</g>'+card(278,207,326,263)+text(302,258,'БЦ Север',24,weight=600)+text(303,285,'Учебная улица, дом 1',12,'#757e8e')
+s+=box(300,306,282,43,'#f1edff','#f1edff',15,False)+text(318,333,'Контакты',14,'#7654e8',500)+text(557,333,'⌄',17,'#7654e8')
+s+=button(300,369,282,'Написать отчёт')+text(304,439,'Отчёты и информация об объекте',11,'#7b8291')
 save('objects',s)
 
 # NFC: a radial scanning scene with a single confirmation receipt.
@@ -73,13 +73,13 @@ s+=box(226,158,146,146,'#fff','#f4f1ff',48)
 s+='<path d="M278 216q13 15 0 30m15-40q22 25 0 50m17-60q30 35 0 70" fill="none" stroke="#7958ee" stroke-width="6" stroke-linecap="round"/>'
 s+=text(155,354,'Поиск NFC-метки',17,weight=600)+text(140,383,'Поднесите телефон к метке',12,'#767c8b')
 s+=card(366,338,258,108)+check(395,372)+text(418,376,'Вход сохранён',15,weight=600)+text(389,416,'БЦ Север',12,'#737b8a')+text(552,416,'09:41',12,'#737b8a')
-s+=box(97,87,150,46,'#fff','#eeedf6',23)+text(112,116,'NFC · БЦ Север',11,'#7654e8',500)
+s+=box(97,87,132,46,'#fff','#eeedf6',23)+text(163,116,'NFC · БЦ Север',11,'#7654e8',500).replace('<text ', '<text text-anchor="middle" ',1)
 save('scan',s)
 
 # Report: one large editorial sheet with overlapping photo attachments.
-s=card(158,49,373,405)+text(183,88,'Новый отчёт',22,weight=600)+text(184,116,'БЦ Север',12,'#797f8e')
-s+=box(180,139,329,144,'#fff','#eeedf6',18,False)
-for i,t in enumerate(['Проверена вентиляция:','Решётки и фильтры в норме.','Посторонних шумов нет.']):s+=text(197,166+i*24,t,13)
+s=card(158,49,373,405)+text(183,100,'Новый отчёт',22,weight=600)+text(184,128,'БЦ Север',12,'#797f8e')
+s+=box(180,151,329,144,'#fff','#eeedf6',18,False)
+for i,t in enumerate(['Проверена вентиляция:','Решётки и фильтры в норме.','Посторонних шумов нет.']):s+=text(197,178+i*24,t,13)
 s+=button(180,393,329,'Отправить отчёт')
 # Photos are genuine existing project assets embedded by relative URL in the SVG.
 import base64
