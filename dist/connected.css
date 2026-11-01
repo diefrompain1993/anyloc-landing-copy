@@ -225,3 +225,10 @@ button.story-link{border:0;padding:0;background:transparent;text-align:left;font
 .an-metrics>button>span,.an-metrics>div>span{font-size:13px}
 .an-object-row strong{font-size:15px}.an-board-head h3{font-weight:500}
 @media(max-width:620px){.an-panel-title h4{font-size:15px}.an-metrics>button>span,.an-metrics>div>span{font-size:11px}.an-metrics small{font-size:10px}.an-person{font-size:12px}.an-day-stats{font-size:11px}.an-drill-path{font-size:10px}}
+/* Keep contractor details stable, including the no-visits state. */
+.an-detail-grid{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)}
+.an-detail-grid>*{min-width:0}
+.is-contractor .an-inspector{height:460px;display:flex;flex-direction:column}
+.is-contractor .an-empty{min-height:0;flex:1}
+@media(max-width:620px){.an-detail-grid{grid-template-columns:minmax(0,1fr)}.is-contractor .an-inspector{height:480px}}
+
