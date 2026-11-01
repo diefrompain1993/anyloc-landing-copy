@@ -99,7 +99,7 @@ s+='<g transform="rotate(-4 390 399)">'+card(246,364,349,90)+check(275,397)+text
 save('tasks',s)
 
 # History: large hours tile and a continuous vertical event timeline.
-s=card(62,101,241,220)+text(85,135,'ЧАСЫ ЗА НЕДЕЛЮ',11,'#7c8191',500)+text(85,211,'13',64,weight=600)+text(185,210,'ч',29,'#8d72dd')+text(85,251,'26 октября — 1 ноября',11,'#7c8191')
+s=card(62,101,241,220)+text(85,135,'ЧАСЫ ЗА НЕДЕЛЮ',11,'#7c8191',500)+text(85,211,'13',64,weight=600)+text(164,210,'ч.',29,'#8d72dd')+text(85,251,'26 октября — 1 ноября',11,'#7c8191')
 for i,h in enumerate([16,30,23,39,28,14,8]):s+=f'<rect x="{85+i*27}" y="{303-h}" width="17" height="{h}" rx="5" fill="#a88af0" opacity="{.4+i*.08}"/>'
 s+=text(363,90,'История',23,weight=600)+text(363,121,'Сегодня',12,'#808697')
 s+='<path d="M346 157V411" stroke="#c8b9ef" stroke-width="2" stroke-dasharray="3 7"/>'
