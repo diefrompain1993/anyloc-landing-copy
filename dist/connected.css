@@ -190,3 +190,7 @@ button.story-link{border:0;padding:0;background:transparent;text-align:left;font
 .finale-tag{height:430px}
 @media(max-width:1050px){.finale-tag{height:370px}}
 @media(max-width:700px){.finale-tag{height:355px}.al-finale .tag-caption{font-size:13px}}
+
+/* Match the header logo size and preserve the source artwork proportions. */
+.al-footer img{display:block;width:144px;height:auto;aspect-ratio:1309/375;object-fit:contain;flex:none}
+@media(max-width:700px){.al-footer img{width:115px}}
