@@ -72,7 +72,7 @@ async function initPlate(){
   await document.fonts.load('500 66px Inter').catch(()=>{});
   const lettering=document.createElement('canvas');lettering.width=lettering.height=2048;
   const letteringContext=lettering.getContext('2d');letteringContext.scale(2,2);letteringContext.fillStyle='#ffffff';letteringContext.textAlign='center';
-  letteringContext.font='500 66px Inter, Arial, sans-serif';letteringContext.fillText('{ Ваша компания }',512,795);
+  letteringContext.font='500 66px Inter, Arial, sans-serif';letteringContext.fillText('{Ваша компания}',512,795);
   letteringContext.font='500 49px Inter, Arial, sans-serif';letteringContext.fillText('Anyloc.ru',512,877);
   const front=new THREE.CanvasTexture(lettering);front.colorSpace=THREE.SRGBColorSpace;front.anisotropy=Math.min(renderer.capabilities.getMaxAnisotropy(),8);
   const decal=new THREE.Mesh(new THREE.PlaneGeometry(3.35,3.35),new THREE.MeshStandardMaterial({color:inkColor,map:front,transparent:true,depthWrite:false,roughness:.62,metalness:.02,bumpMap:front,bumpScale:.003}));decal.position.z=.055;group.add(decal);

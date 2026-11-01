@@ -95,3 +95,33 @@ featureStage.addEventListener('click',e=>{
  if(b.dataset.formatView){featureStage.querySelectorAll('[data-format-view]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));document.querySelector('#format-description').textContent=({Excel:'Таблица для расчётов и сверок в Excel.',CSV:'Строки данных для импорта в таблицы и другие системы.',JSON:'Структурированные данные для дальнейшей обработки.'})[b.dataset.formatView];}
 });
 setFeature('journal');
+// Animate both directions while retaining native details/summary keyboard behavior.
+document.querySelectorAll('.faq-list details').forEach(details=>{
+ const summary=details.querySelector('summary');
+ const answer=details.querySelector('p');
+ let motion=null,fade=null,expanded=details.open;
+ summary.addEventListener('click',event=>{
+  event.preventDefault();
+  const startHeight=details.getBoundingClientRect().height;
+  const startOpacity=details.open?getComputedStyle(answer).opacity:'0';
+  expanded=!expanded;
+  motion?.cancel();fade?.cancel();
+  summary.setAttribute('aria-expanded',String(expanded));
+  if(quiet.matches){details.open=expanded;details.style.height='';details.style.overflow='';return;}
+  // Measure the natural destination before locking the current visual height.
+  details.style.height='';
+  details.open=expanded;
+  const endHeight=details.getBoundingClientRect().height;
+  details.open=true;
+  details.style.height=`${startHeight}px`;details.style.overflow='hidden';
+  const timing={duration:380,easing:'cubic-bezier(.22,1,.36,1)'};
+  const current=details.animate({height:[`${startHeight}px`,`${endHeight}px`]},timing);
+  motion=current;
+  fade=answer.animate({opacity:[startOpacity,expanded?'1':'0']},timing);
+  current.onfinish=()=>{
+   if(motion!==current)return;
+   details.open=expanded;details.style.height='';details.style.overflow='';
+   motion=null;fade=null;
+  };
+ });
+});
