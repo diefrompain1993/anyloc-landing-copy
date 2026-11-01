@@ -178,3 +178,15 @@ button.story-link{border:0;padding:0;background:transparent;text-align:left;font
 .hero-object-field{position:absolute;z-index:-1;inset:0 0 auto;height:560px;pointer-events:none;opacity:0;transition:opacity 900ms ease;background-position:center top;background-size:1400px 600px;background-repeat:no-repeat;background-image:url("assets/hero-object-plan.svg?v=2");mask-image:radial-gradient(ellipse 350px 245px at var(--field-x,50%) var(--field-y,200px),#000d 0%,#0008 40%,transparent 100%);-webkit-mask-image:radial-gradient(ellipse 350px 245px at var(--field-x,50%) var(--field-y,200px),#000d 0%,#0008 40%,transparent 100%)}
 @media(hover:hover) and (pointer:fine){.hero-object-field.is-visible{opacity:.95}}
 @media(prefers-reduced-motion:reduce){.hero-object-field{transition:none}}
+
+/* Readable answers and the physical, custom-branded plate. */
+.al-world .faq-list summary{font-size:clamp(18px,1.4vw,22px);line-height:1.45}
+.al-world .faq-list p{font-size:clamp(16px,1.2vw,19px);line-height:1.7;color:#596575}
+.al-finale-content>p{max-width:560px;font-size:clamp(16px,1.2vw,19px);line-height:1.7}
+.al-finale .tag-caption{margin:6px 0 0;text-align:center;font-size:14px;line-height:1.5;color:#495c78}
+.tag-caption span{font-size:12px;color:#687992}
+.tag-fallback-phone b{font-size:clamp(13px,1.2vw,18px);text-align:center}
+.tag-fallback-phone small{display:block;margin-top:8px;font-size:14px}
+.finale-tag{height:430px}
+@media(max-width:1050px){.finale-tag{height:370px}}
+@media(max-width:700px){.finale-tag{height:355px}.al-finale .tag-caption{font-size:13px}}

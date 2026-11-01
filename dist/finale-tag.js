@@ -69,10 +69,11 @@ async function initPlate(){
   for(const [x,y,sx,sy] of [[.261,.112,1,1],[.743,.112,-1,1],[.261,.593,1,-1],[.743,.593,-1,-1]]){
     raisedLine(p=>{p.move(x,y+.059*sy);p.line(x,y+.010*sy);p.curve(x,y,x+.010*sx,y);p.line(x+.059*sx,y);});
   }
-  await document.fonts.load('500 110px Inter').catch(()=>{});
+  await document.fonts.load('500 54px Inter').catch(()=>{});
   const lettering=document.createElement('canvas');lettering.width=lettering.height=2048;
   const letteringContext=lettering.getContext('2d');letteringContext.scale(2,2);letteringContext.fillStyle='#ffffff';letteringContext.textAlign='center';
-  letteringContext.font='500 110px Inter, Arial, sans-serif';letteringContext.fillText('Anyloc',512,872);
+  letteringContext.font='500 54px Inter, Arial, sans-serif';letteringContext.fillText('{ ваша компания }',512,795);
+  letteringContext.font='500 49px Inter, Arial, sans-serif';letteringContext.fillText('Anyloc.ru',512,877);
   const front=new THREE.CanvasTexture(lettering);front.colorSpace=THREE.SRGBColorSpace;front.anisotropy=Math.min(renderer.capabilities.getMaxAnisotropy(),8);
   const decal=new THREE.Mesh(new THREE.PlaneGeometry(3.35,3.35),new THREE.MeshStandardMaterial({color:inkColor,map:front,transparent:true,depthWrite:false,roughness:.62,metalness:.02,bumpMap:front,bumpScale:.003}));decal.position.z=.055;group.add(decal);
   const tagRadius=.590,tagY=.490;
@@ -82,16 +83,38 @@ async function initPlate(){
 
  const home={x:.12,y:-.3};
  let targetX=home.x,targetY=home.y,frame=0,last=0,drag=null,dirty=true;
- group.rotation.set(home.x,home.y,-.055);
+ const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ let introPending=!reducedMotion,introActive=false,introElapsed=0;
+ group.rotation.set(home.x,reducedMotion?home.y:home.y+Math.PI,-.055);
+ const entranceObserver=new IntersectionObserver(entries=>{
+  if(entries[0].isIntersecting&&entries[0].intersectionRatio>=.45&&introPending){
+   introPending=false;introActive=true;dirty=true;requestFrame();entranceObserver.disconnect();
+  }
+ },{threshold:.45});
+ if(introPending)entranceObserver.observe(stage);
+ function takeControl(){
+  if(!introPending&&!introActive)return;
+  introPending=false;introActive=false;entranceObserver.disconnect();
+  targetX=group.rotation.x;targetY=group.rotation.y;
+ }
+
  function requestFrame(){if(!frame&&visible&&!document.hidden){last=performance.now();frame=requestAnimationFrame(draw);}}
  function draw(time){
   frame=0;if(!visible||document.hidden)return;
   const delta=Math.min((time-last)/1000,.05);last=time;
   const ease=1-Math.exp(-delta/0.075);
-  group.rotation.x+=(targetX-group.rotation.x)*ease;
-  group.rotation.y+=(targetY-group.rotation.y)*ease;
-  const moving=Math.abs(targetX-group.rotation.x)+Math.abs(targetY-group.rotation.y)>.0001;
-  if(!moving){group.rotation.x=targetX;group.rotation.y=targetY;}
+  if(introActive){
+   introElapsed+=delta;
+   const t=Math.min(introElapsed/1.9,1),smooth=t*t*t*(t*(t*6-15)+10);
+   group.rotation.y=home.y+Math.PI*(1-smooth);
+   group.rotation.x=home.x-Math.sin(t*Math.PI)*.09;
+   if(t===1){introActive=false;group.rotation.set(home.x,home.y,-.055);}
+  }else if(!introPending){
+   group.rotation.x+=(targetX-group.rotation.x)*ease;
+   group.rotation.y+=(targetY-group.rotation.y)*ease;
+  }
+  const moving=introActive||(!introPending&&Math.abs(targetX-group.rotation.x)+Math.abs(targetY-group.rotation.y)>.0001);
+  if(!moving&&!introPending){group.rotation.x=targetX;group.rotation.y=targetY;}
   if(dirty||moving){renderer.render(scene,camera);dirty=false;}
   if(moving)frame=requestAnimationFrame(draw);
  }
@@ -104,6 +127,7 @@ async function initPlate(){
  new ResizeObserver(resize).observe(canvas);
  canvas.addEventListener('pointerdown',e=>{
   if(e.button!==0||drag!==null)return;
+  takeControl();
   drag={id:e.pointerId,x:e.clientX,y:e.clientY};canvas.setPointerCapture(e.pointerId);
   canvas.classList.add('is-dragging');canvas.focus({preventScroll:true});
  });
@@ -117,7 +141,7 @@ async function initPlate(){
  function restore(){targetX=home.x;targetY=home.y;dirty=true;requestFrame();}
  canvas.addEventListener('keydown',e=>{
   if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home'].includes(e.key))return;
-  e.preventDefault();if(e.key==='Home'){restore();return;}
+  e.preventDefault();takeControl();if(e.key==='Home'){restore();return;}
   if(e.key==='ArrowLeft')targetY-=.22;if(e.key==='ArrowRight')targetY+=.22;
   if(e.key==='ArrowUp')targetX-=.22;if(e.key==='ArrowDown')targetX+=.22;
   dirty=true;requestFrame();
@@ -133,3 +157,4 @@ async function initPlate(){
  });
  stage.dataset.state='ready';resize();
 }
+
