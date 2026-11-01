@@ -136,7 +136,7 @@ const contactForm=document.querySelector('#contact-form');
 const contactPhone=document.querySelector('#contact-phone');
 const contactError=document.querySelector('#contact-error');
 const contactResult=document.querySelector('.contact-result');
-let contactClosing=false,contactTouched=false,contactOverflow=false,contactScroll='';
+let contactClosing=false,contactTouched=false,contactOverflow=false,contactScroll='',contactOpener=null;
 function phoneDigits(value){let digits=value.replace(/\D/g,'');if(digits[0]==='7'||digits[0]==='8')digits=digits.slice(1);return digits;}
 function phoneMask(d){return '+7'+(d.length?' ('+d.slice(0,3):'')+(d.length>=3?')':'')+(d.length>3?' '+d.slice(3,6):'')+(d.length>6?'-'+d.slice(6,8):'')+(d.length>8?'-'+d.slice(8,10):'');}
 function validateContact(showError=false){const digits=phoneDigits(contactPhone.value);const valid=digits.length===10&&!contactOverflow&&!/^(\d)\1{9}$/.test(digits);contactPhone.closest('.contact-input-wrap').classList.toggle('is-valid',valid);contactPhone.setAttribute('aria-invalid',String(showError&&!valid));contactError.textContent=showError&&!valid?'Введите номер полностью: +7 или 8 и ещё 10 цифр.':'';return valid;}
@@ -151,9 +151,9 @@ contactPhone.addEventListener('keydown',event=>{
  }
 });
 contactPhone.addEventListener('blur',()=>{if(contactPhone.value){contactTouched=true;validateContact(true);}});
-function openContact(){if(contactDialog.open||contactClosing)return;contactForm.reset();contactTouched=false;contactOverflow=false;validateContact();contactResult.hidden=true;contactForm.hidden=false;document.querySelector('#contact-description').hidden=false;contactScroll=document.documentElement.style.overflow;document.documentElement.style.overflow='hidden';contactDialog.showModal();if(!quiet.matches)contactDialog.animate([{opacity:0,transform:'translateY(18px) scale(.97)'},{opacity:1,transform:'translateY(0) scale(1)'}],{duration:350,easing:'cubic-bezier(.22,1,.36,1)'});contactPhone.focus();}
-async function closeContact(){if(!contactDialog.open||contactClosing)return;contactClosing=true;if(!quiet.matches)await contactDialog.animate([{opacity:1,transform:'translateY(0) scale(1)'},{opacity:0,transform:'translateY(10px) scale(.98)'}],{duration:180,easing:'ease-in',fill:'forwards'}).finished;contactDialog.close();contactDialog.getAnimations().forEach(a=>a.cancel());document.documentElement.style.overflow=contactScroll;contactClosing=false;document.querySelector('.contact-trigger').focus();}
-document.querySelector('.contact-trigger').addEventListener('click',openContact);
+function openContact(event){if(contactDialog.open||contactClosing)return;contactOpener=event.currentTarget;contactForm.reset();contactTouched=false;contactOverflow=false;validateContact();contactResult.hidden=true;contactForm.hidden=false;document.querySelector('#contact-description').hidden=false;contactScroll=document.documentElement.style.overflow;document.documentElement.style.overflow='hidden';contactDialog.showModal();if(!quiet.matches)contactDialog.animate([{opacity:0,transform:'translateY(18px) scale(.97)'},{opacity:1,transform:'translateY(0) scale(1)'}],{duration:350,easing:'cubic-bezier(.22,1,.36,1)'});contactPhone.focus();}
+async function closeContact(){if(!contactDialog.open||contactClosing)return;contactClosing=true;if(!quiet.matches)await contactDialog.animate([{opacity:1,transform:'translateY(0) scale(1)'},{opacity:0,transform:'translateY(10px) scale(.98)'}],{duration:180,easing:'ease-in',fill:'forwards'}).finished;contactDialog.close();contactDialog.getAnimations().forEach(a=>a.cancel());document.documentElement.style.overflow=contactScroll;contactClosing=false;contactOpener?.focus({preventScroll:true});}
+document.querySelectorAll('.contact-trigger').forEach(button=>button.addEventListener('click',openContact));
 document.querySelector('.contact-close').addEventListener('click',closeContact);
 document.querySelector('.contact-done').addEventListener('click',closeContact);
 contactDialog.addEventListener('cancel',event=>{event.preventDefault();closeContact();});
