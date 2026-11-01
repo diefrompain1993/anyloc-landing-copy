@@ -48,7 +48,7 @@ function setMobile(key,animate=true){
  panel.setAttribute('aria-labelledby',`mobile-tab-${key}`);panel.dataset.mobileView=key;
  panel.style.setProperty('--mobile-accent',d.color);panel.style.setProperty('--mobile-tint',d.bg);
  document.querySelector('#mobile-copy').innerHTML=`<div class="mobile-product"><img src="assets/favicon.png" width="32" height="32" alt=""><strong>Anyloc</strong><span>${d.title}</span></div><h2>${d.heading}</h2><p>${d.text}</p>`;
- art.innerHTML=`<img class="unified-ios-art" src="assets/ios/showcase-${key}.svg?v=6" width="680" height="520" alt="${d.first[3]}. ${d.second[3]}." draggable="false">`;
+ art.innerHTML=`<img class="unified-ios-art" src="assets/ios/showcase-${key}.svg?v=7" width="680" height="520" alt="${d.first[3]}. ${d.second[3]}." draggable="false">`;
  if(animate&&!quiet.matches){panel.getAnimations().forEach(a=>a.cancel());panel.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:380,easing:'cubic-bezier(.22,1,.36,1)'});}
 }
 mobileTabs.forEach((button,index)=>{
@@ -130,3 +130,32 @@ function renderAnalytics(animate=false){
 document.querySelectorAll('[data-analytics-mode]').forEach(button=>button.addEventListener('click',()=>{analyticsMode=button.dataset.analyticsMode;document.querySelectorAll('[data-analytics-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));renderAnalytics(true);}));
 analyticsBoard.addEventListener('click',event=>{const button=event.target.closest('button');if(!button)return;let focusSelector='';if(button.dataset.analyticsDay){analyticsDay=Number(button.dataset.analyticsDay);focusSelector=`[data-analytics-day="${analyticsDay}"]`;}else if(button.dataset.analyticsMetric){analyticsMetric=button.dataset.analyticsMetric;focusSelector=`[data-analytics-metric="${analyticsMetric}"]`;}else if(button.dataset.analyticsObject){analyticsObject=Number(button.dataset.analyticsObject);focusSelector=`[data-analytics-object="${analyticsObject}"]`;}else return;renderAnalytics();analyticsBoard.querySelector(focusSelector)?.focus({preventScroll:true});});
 renderAnalytics();
+// Contact prototype: validates locally and never sends or persists phone numbers.
+const contactDialog=document.querySelector('#contact-dialog');
+const contactForm=document.querySelector('#contact-form');
+const contactPhone=document.querySelector('#contact-phone');
+const contactError=document.querySelector('#contact-error');
+const contactResult=document.querySelector('.contact-result');
+let contactClosing=false,contactTouched=false,contactOverflow=false,contactScroll='';
+function phoneDigits(value){let digits=value.replace(/\D/g,'');if(digits[0]==='7'||digits[0]==='8')digits=digits.slice(1);return digits;}
+function phoneMask(d){return '+7'+(d.length?' ('+d.slice(0,3):'')+(d.length>=3?')':'')+(d.length>3?' '+d.slice(3,6):'')+(d.length>6?'-'+d.slice(6,8):'')+(d.length>8?'-'+d.slice(8,10):'');}
+function validateContact(showError=false){const digits=phoneDigits(contactPhone.value);const valid=digits.length===10&&!contactOverflow&&!/^(\d)\1{9}$/.test(digits);contactPhone.closest('.contact-input-wrap').classList.toggle('is-valid',valid);contactPhone.setAttribute('aria-invalid',String(showError&&!valid));contactError.textContent=showError&&!valid?'Введите номер полностью: +7 или 8 и ещё 10 цифр.':'';return valid;}
+contactPhone.addEventListener('input',()=>{const raw=contactPhone.value,caret=contactPhone.selectionStart??raw.length;const before=phoneDigits(raw.slice(0,caret)).length;const digits=phoneDigits(raw);contactOverflow=digits.length>10;contactPhone.value=digits.length||raw?phoneMask(digits.slice(0,10)):'';let position=2,count=0;for(let i=2;i<contactPhone.value.length;i++){if(/\d/.test(contactPhone.value[i]))count++;if(count>=before){position=i+1;break;}position=i+1;}if(caret===raw.length)position=contactPhone.value.length;contactPhone.setSelectionRange(position,position);validateContact(contactTouched);});
+contactPhone.addEventListener('keydown',event=>{
+ if(event.key!=='Backspace'||contactPhone.selectionStart!==contactPhone.selectionEnd)return;
+ const caret=contactPhone.selectionStart,value=contactPhone.value;
+ if(caret<=2){event.preventDefault();if(phoneDigits(value).length===0)contactPhone.value='';return;}
+ if(!/\d/.test(value[caret-1])){
+  event.preventDefault();let index=caret-1;while(index>1&&!/\d/.test(value[index]))index--;
+  if(index>1){const next=value.slice(0,index)+value.slice(caret);contactPhone.value=next;contactPhone.setSelectionRange(index,index);contactPhone.dispatchEvent(new Event('input',{bubbles:true}));}
+ }
+});
+contactPhone.addEventListener('blur',()=>{if(contactPhone.value){contactTouched=true;validateContact(true);}});
+function openContact(){if(contactDialog.open||contactClosing)return;contactForm.reset();contactTouched=false;contactOverflow=false;validateContact();contactResult.hidden=true;contactForm.hidden=false;document.querySelector('#contact-description').hidden=false;contactScroll=document.documentElement.style.overflow;document.documentElement.style.overflow='hidden';contactDialog.showModal();if(!quiet.matches)contactDialog.animate([{opacity:0,transform:'translateY(18px) scale(.97)'},{opacity:1,transform:'translateY(0) scale(1)'}],{duration:350,easing:'cubic-bezier(.22,1,.36,1)'});contactPhone.focus();}
+async function closeContact(){if(!contactDialog.open||contactClosing)return;contactClosing=true;if(!quiet.matches)await contactDialog.animate([{opacity:1,transform:'translateY(0) scale(1)'},{opacity:0,transform:'translateY(10px) scale(.98)'}],{duration:180,easing:'ease-in',fill:'forwards'}).finished;contactDialog.close();contactDialog.getAnimations().forEach(a=>a.cancel());document.documentElement.style.overflow=contactScroll;contactClosing=false;document.querySelector('.contact-trigger').focus();}
+document.querySelector('.contact-trigger').addEventListener('click',openContact);
+document.querySelector('.contact-close').addEventListener('click',closeContact);
+document.querySelector('.contact-done').addEventListener('click',closeContact);
+contactDialog.addEventListener('cancel',event=>{event.preventDefault();closeContact();});
+contactDialog.addEventListener('click',event=>{const r=contactDialog.getBoundingClientRect();if(event.target===contactDialog&&(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom))closeContact();});
+contactForm.addEventListener('submit',event=>{event.preventDefault();contactTouched=true;if(!validateContact(true)){contactPhone.focus();return;}contactForm.hidden=true;document.querySelector('#contact-description').hidden=true;contactResult.hidden=false;contactResult.focus();if(!quiet.matches)contactResult.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:300,easing:'ease-out'});});

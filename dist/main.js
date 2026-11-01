@@ -44,7 +44,7 @@ function portrait(p,i){
  ];
  const extras=[
  '<g fill="none" stroke="#493d49" stroke-width="1.8"><rect x="-17" y="-8" width="14" height="11" rx="4"/><rect x="3" y="-8" width="14" height="11" rx="4"/><path d="M-3-4h6"/></g>',
- '<path d="M-6 12Q0 16 6 12" fill="none" stroke="#874f45" stroke-width="1.5"/>',
+ '',
  '',
  '<g fill="#efc76e"><circle cx="-22" cy="9" r="3"/><circle cx="22" cy="9" r="3"/></g>',
  '',
@@ -52,7 +52,7 @@ function portrait(p,i){
  '<g fill="none" stroke="#384b62" stroke-width="2"><circle cx="-10" cy="-3" r="7"/><circle cx="10" cy="-3" r="7"/><path d="M-3-3h6"/></g>',
  '<g fill="#b87a63"><circle cx="-12" cy="4" r="1"/><circle cx="-8" cy="5" r="1"/><circle cx="8" cy="5" r="1"/><circle cx="12" cy="4" r="1"/></g>'
  ];
- return `<defs><clipPath id="${id}"><circle r="47"/></clipPath></defs><g clip-path="url(#${id})"><circle r="47" fill="${p[2]}"/>${i===7?`<circle cx="16" cy="-31" r="12" fill="${hair}"/>`:''}<path d="${backs[i]}" fill="${hair}"/><path d="M-38 48Q-37 20 0 19Q37 20 38 48" fill="${p[5]}"/><path d="M-8 13v12q8 10 16 0V13" fill="${skin}"/><ellipse cy="-3" rx="${[21,20,22,21,22,20,21,19][i]}" ry="${[26,27,25,25,26,27,26,25][i]}" fill="${skin}"/><path d="${fronts[i]}" fill="${hair}"/><g fill="#30262b"><ellipse cx="-8" cy="-2" rx="1.7" ry="2.2"/><ellipse cx="8" cy="-2" rx="1.7" ry="2.2"/></g><path d="M-5 10q5 5 10 0" fill="none" stroke="#874f45" stroke-width="2" stroke-linecap="round"/>${extras[i]}</g>`;
+ return `<defs><clipPath id="${id}"><circle r="47"/></clipPath></defs><g clip-path="url(#${id})"><circle r="47" fill="${p[2]}"/><path d="${backs[i]}" fill="${hair}"/><path d="M-38 48Q-37 20 0 19Q37 20 38 48" fill="${p[5]}"/><path d="M-8 13v12q8 10 16 0V13" fill="${skin}"/><ellipse cy="-3" rx="${[21,20,22,21,22,20,21,19][i]}" ry="${[26,27,25,25,26,27,26,25][i]}" fill="${skin}"/><path d="${fronts[i]}" fill="${hair}"/><g fill="#30262b"><ellipse cx="-8" cy="-2" rx="1.7" ry="2.2"/><ellipse cx="8" cy="-2" rx="1.7" ry="2.2"/></g><path d="M-5 10q5 5 10 0" fill="none" stroke="#874f45" stroke-width="2" stroke-linecap="round"/>${extras[i]}</g>`;
 }
 document.querySelectorAll('[data-avatar]').forEach(el=>{const i=Number(el.dataset.avatar);el.innerHTML=`<svg viewBox="-52 -52 104 104" aria-hidden="true">${portrait(people[i],i)}</svg>`;});
 const graph=document.querySelector('#people-graph');

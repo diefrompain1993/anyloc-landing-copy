@@ -70,7 +70,7 @@ save('objects',s)
 # NFC: a radial scanning scene with a single confirmation receipt.
 s=''
 for r,op in [(157,.16),(116,.25),(77,.38)]:s+=f'<circle cx="299" cy="231" r="{r}" fill="none" stroke="#a497f1" stroke-opacity="{op}" stroke-width="1.6"/>'
-s+=box(235,167,128,128,'#fff','#f4f1ff',64)
+s+=box(247,179,104,104,'#fff','#f4f1ff',52)
 s+='<path d="M278 216q13 15 0 30m15-40q22 25 0 50m17-60q30 35 0 70" fill="none" stroke="#7958ee" stroke-width="6" stroke-linecap="round"/>'
 s+=text(155,354,'Поиск NFC-метки',17,weight=600)+text(140,383,'Поднесите телефон к метке',12,'#767c8b')
 s+=card(366,338,258,108)+check(395,372)+text(418,376,'Вход сохранён',15,weight=600)+text(389,416,'БЦ Север',12,'#737b8a')+text(552,416,'09:41',12,'#737b8a')
