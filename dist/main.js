@@ -45,9 +45,9 @@ function portrait(p,i){
  const extras=[
  '<g fill="none" stroke="#493d49" stroke-width="1.8"><rect x="-17" y="-8" width="14" height="11" rx="4"/><rect x="3" y="-8" width="14" height="11" rx="4"/><path d="M-3-4h6"/></g>',
  '<path d="M-6 12Q0 16 6 12" fill="none" stroke="#874f45" stroke-width="1.5"/>',
- '<path d="M-20 4Q-17 26 0 26Q17 26 20 4L13 13Q0 20-13 13Z" fill="'+hair+'"/>',
+ '',
  '<g fill="#efc76e"><circle cx="-22" cy="9" r="3"/><circle cx="22" cy="9" r="3"/></g>',
- '<path d="M-8 9Q-4 4 0 8Q4 4 8 9Q3 12 0 10Q-3 12-8 9" fill="'+hair+'"/>',
+ '',
  '<path d="M-22-20Q0-40 23-20" fill="none" stroke="#ead293" stroke-width="4"/>',
  '<g fill="none" stroke="#384b62" stroke-width="2"><circle cx="-10" cy="-3" r="7"/><circle cx="10" cy="-3" r="7"/><path d="M-3-3h6"/></g>',
  '<g fill="#b87a63"><circle cx="-12" cy="4" r="1"/><circle cx="-8" cy="5" r="1"/><circle cx="8" cy="5" r="1"/><circle cx="12" cy="4" r="1"/></g>'

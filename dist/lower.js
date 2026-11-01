@@ -10,7 +10,7 @@ world.querySelectorAll('[data-enter]').forEach(element => revealObserver.observe
 const storyIcon=(type)=>`<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${({check:'<path d="m5 12 4 4L19 6"/>',nfc:'<path d="M7 8a6 6 0 0 1 0 8M11 5a10 10 0 0 1 0 14M15 2a14 14 0 0 1 0 20"/>',file:'<path d="M14 3H5v18h14V8Zm0 0v5h5M8 12h8M8 16h6"/>',camera:'<path d="M3 7h4l2-3h6l2 3h4v14H3Z"/><circle cx="12" cy="13" r="4"/>'})[type]}</svg>`;
 const stories={
  presence:{number:'01 / ПРИСУТСТВИЕ',heading:'Учёт присутствия<br>с защищёнными NFC-метками',text:'Сотрудник прикладывает телефон к защищённой NFC-метке на объекте. Anyloc сохраняет время отметки, а руководитель видит текущие смены и отработанные часы.',tags:['Вход и выход','Рабочее время'],link:'Посмотреть учёт присутствия',screen:'presence',title:'Вы на месте',subtitle:'Начало смены · 09:41',icon:'nfc',event:'Вход подтверждён',detail:'БЦ Орион · Алексей Воронов'},
- service:{number:'02 / ОБСЛУЖИВАНИЕ',heading:'Сохраняйте отчёты<br>об обслуживании',text:'После проверки оборудования сотрудник отправляет отчёт с фотографиями и комментарием. Руководитель может открыть запись в журнале объекта.',tags:['Фото и комментарии','Журнал объекта'],link:'Посмотреть пример отчёта',screen:'reports',title:'Проверка завершена',subtitle:'Проверка оборудования',icon:'file',event:'Отчёт в журнале',detail:'Осмотр завершён · 2 фотографии'},
+ service:{number:'02 / ОБСЛУЖИВАНИЕ',heading:'Сохраняйте отчёты<br>об обслуживании',text:'После проверки оборудования сотрудник отправляет отчёт с фотографиями и комментарием. Руководитель может открыть отчёт в карточке объекта.',tags:['Фото и комментарии','Отчёты объекта'],link:'Посмотреть пример отчёта',screen:'reports',title:'Проверка завершена',subtitle:'Проверка оборудования',icon:'file',event:'Отчёт в журнале',detail:'Осмотр завершён · 2 фотографии'},
  cleaning:{number:'03 / КЛИНИНГ',heading:'Проверяйте уборку<br>по фотоотчётам',text:'После уборки сотрудник прикладывает фотографии и описывает выполненную работу. Отчёт сохраняется в журнале выбранного объекта.',tags:['Отчёты с объекта','История работ'],link:'Посмотреть отчёт о работе',screen:'reports',title:'Уборка завершена',subtitle:'Уборка общих зон',icon:'camera',event:'Отчёт об уборке сохранён',detail:'БЦ Орион · Отчёт об уборке'}
 };
 function setStory(key,animate=true){
@@ -35,7 +35,7 @@ setStory('presence',false);
 const mobileViews={
  objects:{title:'Объекты',heading:'Информация об объекте<br>в мобильном приложении',text:'Откройте нужный объект, посмотрите адрес, контакты и последние отчёты. Отсюда можно перейти к отправке нового отчёта.',chips:['Список объектов','Контакты','Журнал'],color:'#2768df',bg:'#eaf1ff',first:['objects',100,630,'Список объектов в приложении Anyloc'],second:['object',236,390,'Карточка объекта с адресом, контактами и кнопкой отчёта'],label:'Карточка объекта',stamp:'В приложении',icon:'file'},
  scan:{title:'NFC-отметки',heading:'Отмечайте вход и выход<br>с помощью телефона',text:'Поднесите телефон к защищённой NFC-метке на объекте. Сохранённую отметку можно проверить в истории вместе с временем входа или выхода.',chips:['Сканирование NFC','Вход и выход'],color:'#7550d8',bg:'#f0eaff',first:['scan',430,450,'Поиск NFC-метки в приложении'],second:['history',430,305,'Записи о входе и выходе в истории'],label:'Отметка в истории',stamp:'NFC',icon:'nfc'},
- report:{title:'Отчёты',heading:'Отправляйте отчёты<br>с места работы',text:'Опишите выполненную работу и приложите фотографии или файлы. Отправленные отчёты сохраняются в журнале объекта.',chips:['Описание работы','Фото и файлы'],color:'#2768df',bg:'#eaf1ff',first:['report',237,820,'Форма отчёта с полем описания, вложениями и кнопкой отправки'],second:['object',660,385,'Последние отчёты в карточке объекта'],label:'Журнал объекта',stamp:'Отчёт',icon:'file'},
+ report:{title:'Отчёты',heading:'Отправляйте отчёты<br>с места работы',text:'Опишите выполненную работу и приложите фотографии или файлы. Отправленные отчёты доступны в карточке объекта.',chips:['Описание работы','Фото и файлы'],color:'#2768df',bg:'#eaf1ff',first:['report',237,820,'Форма отчёта с полем описания, вложениями и кнопкой отправки'],second:['object',660,385,'Последние отчёты в карточке объекта'],label:'Отчёты объекта',stamp:'Отчёт',icon:'file'},
  tasks:{title:'Задачи',heading:'Проверяйте задачи<br>и сроки выполнения',text:'В приложении видны назначенные работы и сроки. Выполненные задачи остаются в списке с отметкой о завершении.',chips:['Назначенные работы','Сроки','Статусы'],color:'#bc7a00',bg:'#fff1cd',first:['tasks',100,375,'Открытые задачи с датами выполнения'],second:['tasks',475,290,'Выполненные задачи с отметками'],label:'Выполненные работы',stamp:'Задачи',icon:'check'},
  history:{title:'История',heading:'Просматривайте отметки<br>и рабочее время',text:'Проверьте рабочие часы за неделю, время входа и выхода, а также отправленные отчёты. Записи в истории сгруппированы по дням.',chips:['Рабочие часы','Отметки','Отчёты'],color:'#348269',bg:'#e4f2eb',first:['history',100,310,'Рабочие часы за неделю в приложении'],second:['history',430,620,'История входов, выходов и отправленных отчётов'],label:'Записи по дням',stamp:'История',icon:'file'}
 };
@@ -48,7 +48,7 @@ function setMobile(key,animate=true){
  panel.setAttribute('aria-labelledby',`mobile-tab-${key}`);panel.dataset.mobileView=key;
  panel.style.setProperty('--mobile-accent',d.color);panel.style.setProperty('--mobile-tint',d.bg);
  document.querySelector('#mobile-copy').innerHTML=`<div class="mobile-product"><img src="assets/favicon.png" width="32" height="32" alt=""><strong>Anyloc</strong><span>${d.title}</span></div><h2>${d.heading}</h2><p>${d.text}</p>`;
- art.innerHTML=`<img class="unified-ios-art" src="assets/ios/showcase-${key}.svg?v=5" width="680" height="520" alt="${d.first[3]}. ${d.second[3]}." draggable="false">`;
+ art.innerHTML=`<img class="unified-ios-art" src="assets/ios/showcase-${key}.svg?v=6" width="680" height="520" alt="${d.first[3]}. ${d.second[3]}." draggable="false">`;
  if(animate&&!quiet.matches){panel.getAnimations().forEach(a=>a.cancel());panel.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:380,easing:'cubic-bezier(.22,1,.36,1)'});}
 }
 mobileTabs.forEach((button,index)=>{
@@ -73,15 +73,16 @@ preview.addEventListener('close',()=>previousFocus?.focus({preventScroll:true}))
 
 // Feature explorer: one shared canvas, four distinct stories.
 // Animate both directions while retaining native details/summary keyboard behavior.
+const faqControllers=[];
 document.querySelectorAll('.faq-list details').forEach(details=>{
  const summary=details.querySelector('summary');
  const answer=details.querySelector('p');
  let motion=null,fade=null,expanded=details.open;
- summary.addEventListener('click',event=>{
-  event.preventDefault();
+ const setExpanded=next=>{
+  if(expanded===next)return;
   const startHeight=details.getBoundingClientRect().height;
   const startOpacity=details.open?getComputedStyle(answer).opacity:'0';
-  expanded=!expanded;
+  expanded=next;
   motion?.cancel();fade?.cancel();
   summary.setAttribute('aria-expanded',String(expanded));
   if(quiet.matches){details.open=expanded;details.style.height='';details.style.overflow='';return;}
@@ -100,6 +101,14 @@ document.querySelectorAll('.faq-list details').forEach(details=>{
    details.open=expanded;details.style.height='';details.style.overflow='';
    motion=null;fade=null;
   };
+ };
+ faqControllers.push({details,setExpanded});
+ summary.setAttribute('aria-expanded',String(expanded));
+ summary.addEventListener('click',event=>{
+  event.preventDefault();
+  const next=!expanded;
+  if(next)faqControllers.forEach(controller=>{if(controller.details!==details)controller.setExpanded(false);});
+  setExpanded(next);
  });
 });
 // Management analytics: synthetic examples follow the product's actual metrics.

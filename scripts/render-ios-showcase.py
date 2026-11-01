@@ -70,7 +70,7 @@ save('objects',s)
 # NFC: a radial scanning scene with a single confirmation receipt.
 s=''
 for r,op in [(157,.16),(116,.25),(77,.38)]:s+=f'<circle cx="299" cy="231" r="{r}" fill="none" stroke="#a497f1" stroke-opacity="{op}" stroke-width="1.6"/>'
-s+=box(226,158,146,146,'#fff','#f4f1ff',48)
+s+=box(235,167,128,128,'#fff','#f4f1ff',64)
 s+='<path d="M278 216q13 15 0 30m15-40q22 25 0 50m17-60q30 35 0 70" fill="none" stroke="#7958ee" stroke-width="6" stroke-linecap="round"/>'
 s+=text(155,354,'Поиск NFC-метки',17,weight=600)+text(140,383,'Поднесите телефон к метке',12,'#767c8b')
 s+=card(366,338,258,108)+check(395,372)+text(418,376,'Вход сохранён',15,weight=600)+text(389,416,'БЦ Север',12,'#737b8a')+text(552,416,'09:41',12,'#737b8a')
@@ -103,6 +103,6 @@ s=card(62,101,241,220)+text(85,135,'ЧАСЫ ЗА НЕДЕЛЮ',11,'#7c8191',500
 for i,h in enumerate([16,30,23,39,28,14,8]):s+=f'<rect x="{85+i*27}" y="{303-h}" width="17" height="{h}" rx="5" fill="#a88af0" opacity="{.4+i*.08}"/>'
 s+=text(363,90,'История',23,weight=600)+text(363,121,'Сегодня',12,'#808697')
 s+='<path d="M346 157V411" stroke="#c8b9ef" stroke-width="2" stroke-dasharray="3 7"/>'
-for y,title,sub,time,c in [(142,'Вход на объект','БЦ Север','09:41','#55b895'),(244,'Отчёт отправлен','Проверка вентиляции','13:00','#7d9be4'),(346,'Выход с объекта','БЦ Север','18:02','#a58bdc')]:
+for y,title,sub,time,c in [(142,'Выход с объекта','БЦ Север','18:02','#a58bdc'),(244,'Отчёт отправлен','Проверка вентиляции','13:00','#7d9be4'),(346,'Вход на объект','БЦ Север','09:41','#55b895')]:
  s+=f'<circle cx="346" cy="{y+30}" r="5" fill="{c}" stroke="white" stroke-width="3"/>'+card(365,y,252,85)+text(383,y+29,title,14,weight=500)+text(383,y+54,sub,10,'#7c8492')+text(560,y+69,time,10,'#7c8492')
 save('history',s)
