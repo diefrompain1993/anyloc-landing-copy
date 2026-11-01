@@ -51,19 +51,20 @@ def save(key,s):
  svg=base(s)
  svg=svg.replace('<defs>', '<defs>'+font_styles)
  svg=svg.replace('viewBox="0 0 680 520"', 'viewBox="35 25 610 465"')
+ if key=='objects':svg=svg.replace('35 25 610 465','35 25 610 490')
  svg=svg.replace('<rect width="680" height="520" fill="url(#grid)" mask="url(#mask)"/>','')
  svg=svg.replace('<defs>','<defs><linearGradient id="glass" x2=".8" y2="1"><stop stop-color="#f2f7ff" stop-opacity=".8"/><stop offset=".55" stop-color="#fff" stop-opacity=".25"/><stop offset="1" stop-color="#f4f0ff" stop-opacity=".8"/></linearGradient>')
  svg=svg.replace('dy="3" stdDeviation="3"','dy="10" stdDeviation="12"').replace('flood-opacity=".10"','flood-opacity=".09"')
  (out/f'showcase-{key}.svg').write_text(svg,encoding='utf-8')
 
 # Objects: tall directory behind a broad, overlapping object detail sheet.
-s='<g transform="rotate(-3 227 240)">'+card(75,54,286,365)+text(98,101,'Объекты',22,weight=600)
-s+=box(94,119,247,35,'#fff','#eeedf6',13,False)+text(110,141,'Поиск объекта',12,'#9299a6')
-for y,title,addr in [(170,'БЦ Север','Учебная улица, дом 1'),(246,'ЖК Сосновый','Учебная улица, дом 2'),(322,'Офис Центральный','Учебная улица, дом 4')]:
+s='<g transform="rotate(-3 227 240)">'+card(75,54,286,381)+text(98,117,'Объекты',22,weight=600)
+s+=box(94,135,247,35,'#fff','#eeedf6',13,False)+text(110,157,'Поиск объекта',12,'#9299a6')
+for y,title,addr in [(186,'БЦ Север','Учебная улица, дом 1'),(262,'ЖК Сосновый','Учебная улица, дом 2'),(338,'Офис Центральный','Учебная улица, дом 4')]:
  s+=box(94,y,247,65,'#fff','#eeedf6',17,False)+text(111,y+27,title,15,weight=600)+text(111,y+46,addr,10,'#778190')+text(320,y+35,'›',20,'#9397a6')
-s+='</g>'+card(278,207,326,263)+text(302,258,'БЦ Север',24,weight=600)+text(303,285,'Учебная улица, дом 1',12,'#757e8e')
-s+=box(300,306,282,43,'#f1edff','#f1edff',15,False)+text(318,333,'Контакты',14,'#7654e8',500)+text(557,333,'⌄',17,'#7654e8')
-s+=button(300,369,282,'Написать отчёт')+text(304,439,'Отчёты и информация об объекте',11,'#7b8291')
+s+='</g>'+card(278,207,326,279)+text(302,274,'БЦ Север',24,weight=600)+text(303,301,'Учебная улица, дом 1',12,'#757e8e')
+s+=box(300,322,282,43,'#f1edff','#f1edff',15,False)+text(318,349,'Контакты',14,'#7654e8',500)+text(557,349,'⌄',17,'#7654e8')
+s+=button(300,385,282,'Написать отчёт')+text(304,455,'Отчёты и информация об объекте',11,'#7b8291')
 save('objects',s)
 
 # NFC: a radial scanning scene with a single confirmation receipt.

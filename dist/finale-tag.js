@@ -69,10 +69,10 @@ async function initPlate(){
   for(const [x,y,sx,sy] of [[.261,.112,1,1],[.743,.112,-1,1],[.261,.593,1,-1],[.743,.593,-1,-1]]){
     raisedLine(p=>{p.move(x,y+.059*sy);p.line(x,y+.010*sy);p.curve(x,y,x+.010*sx,y);p.line(x+.059*sx,y);});
   }
-  await document.fonts.load('500 54px Inter').catch(()=>{});
+  await document.fonts.load('500 66px Inter').catch(()=>{});
   const lettering=document.createElement('canvas');lettering.width=lettering.height=2048;
   const letteringContext=lettering.getContext('2d');letteringContext.scale(2,2);letteringContext.fillStyle='#ffffff';letteringContext.textAlign='center';
-  letteringContext.font='500 54px Inter, Arial, sans-serif';letteringContext.fillText('{ ваша компания }',512,795);
+  letteringContext.font='500 66px Inter, Arial, sans-serif';letteringContext.fillText('{ Ваша компания }',512,795);
   letteringContext.font='500 49px Inter, Arial, sans-serif';letteringContext.fillText('Anyloc.ru',512,877);
   const front=new THREE.CanvasTexture(lettering);front.colorSpace=THREE.SRGBColorSpace;front.anisotropy=Math.min(renderer.capabilities.getMaxAnisotropy(),8);
   const decal=new THREE.Mesh(new THREE.PlaneGeometry(3.35,3.35),new THREE.MeshStandardMaterial({color:inkColor,map:front,transparent:true,depthWrite:false,roughness:.62,metalness:.02,bumpMap:front,bumpScale:.003}));decal.position.z=.055;group.add(decal);
@@ -85,7 +85,7 @@ async function initPlate(){
  let targetX=home.x,targetY=home.y,frame=0,last=0,drag=null,dirty=true;
  const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
  let introPending=!reducedMotion,introActive=false,introElapsed=0;
- group.rotation.set(home.x,reducedMotion?home.y:home.y+Math.PI,-.055);
+ group.rotation.set(reducedMotion?home.x:home.x-Math.PI,home.y,-.055);
  const entranceObserver=new IntersectionObserver(entries=>{
   if(entries[0].isIntersecting&&entries[0].intersectionRatio>=.45&&introPending){
    introPending=false;introActive=true;dirty=true;requestFrame();entranceObserver.disconnect();
@@ -106,8 +106,8 @@ async function initPlate(){
   if(introActive){
    introElapsed+=delta;
    const t=Math.min(introElapsed/1.9,1),smooth=t*t*t*(t*(t*6-15)+10);
-   group.rotation.y=home.y+Math.PI*(1-smooth);
-   group.rotation.x=home.x-Math.sin(t*Math.PI)*.09;
+   group.rotation.x=home.x-Math.PI*(1-smooth);
+   group.rotation.y=home.y;
    if(t===1){introActive=false;group.rotation.set(home.x,home.y,-.055);}
   }else if(!introPending){
    group.rotation.x+=(targetX-group.rotation.x)*ease;
@@ -157,4 +157,3 @@ async function initPlate(){
  });
  stage.dataset.state='ready';resize();
 }
-
