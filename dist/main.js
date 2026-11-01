@@ -114,3 +114,24 @@ function tick(now){frame=0;if(paused||!visible||document.hidden)return;if(last)c
 function sync(){cancelAnimationFrame(frame);frame=0;last=0;document.querySelector('.hero-art').classList.toggle('motion-paused',paused||document.hidden);if(!paused&&visible&&!document.hidden)frame=requestAnimationFrame(tick);}
 new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;sync();},{threshold:.05}).observe(graph);
 quiet.addEventListener('change',()=>{paused=quiet.matches;render();sync();});document.addEventListener('visibilitychange',sync);render();sync();
+
+// A local NFC texture follows the pointer gently; no idle animation loop.
+(()=>{
+ const hero=document.querySelector('.connected-hero'),field=document.querySelector('.hero-nfc-field');
+ if(!hero||!field||!matchMedia('(hover:hover) and (pointer:fine)').matches)return;
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+ let x=0,y=0,tx=0,ty=0,frame=0,active=false;
+ function draw(){
+  const blend=reduced.matches?1:.12;x+=(tx-x)*blend;y+=(ty-y)*blend;
+  field.style.setProperty('--nfc-x',x+'px');field.style.setProperty('--nfc-y',y+'px');
+  frame=active&&(Math.abs(tx-x)+Math.abs(ty-y)>.2)?requestAnimationFrame(draw):0;
+ }
+ hero.addEventListener('pointermove',e=>{
+  if(e.pointerType==='touch')return;
+  const r=hero.getBoundingClientRect();tx=e.clientX-r.left;ty=e.clientY-r.top;
+  const boundary=hero.querySelector('.hero-actions').getBoundingClientRect().bottom-r.top+20;
+  if(ty>boundary){active=false;field.classList.remove('is-visible');return;}
+  if(!active){x=tx;y=ty;}active=true;field.classList.add('is-visible');if(!frame)frame=requestAnimationFrame(draw);
+ },{passive:true});
+ hero.addEventListener('pointerleave',()=>{active=false;field.classList.remove('is-visible');});
+})();

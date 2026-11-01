@@ -172,3 +172,8 @@ button.story-link{border:0;padding:0;background:transparent;text-align:left;font
 @media(prefers-reduced-motion:reduce){.finale-tag canvas,.tag-reset{transition:none}}
 /* Keep navigation centered even without a right-hand CTA. */
 @media(min-width:901px){.header,.header.is-past-intro{display:grid;grid-template-columns:minmax(144px,1fr) auto minmax(144px,1fr)}.header .brand{justify-self:start}.header nav{grid-column:2;justify-self:center}}
+
+/* Quiet contactless-wave texture, revealed only around the pointer. */
+.connected-hero{isolation:isolate}.hero-nfc-field{position:absolute;z-index:-1;inset:0 0 auto;height:540px;pointer-events:none;opacity:0;transition:opacity .8s ease;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='104' height='104' viewBox='0 0 104 104'%3E%3Cg fill='none' stroke='%238496ad' stroke-opacity='.28' stroke-width='1' stroke-linecap='round'%3E%3Cpath d='M43 42Q53 52 43 62M50 35Q67 52 50 69M57 28Q81 52 57 76'/%3E%3C/g%3E%3C/svg%3E");mask-image:radial-gradient(ellipse 245px 195px at var(--nfc-x,50%) var(--nfc-y,170px),#000 0%,#0009 35%,transparent 100%);-webkit-mask-image:radial-gradient(ellipse 245px 195px at var(--nfc-x,50%) var(--nfc-y,170px),#000 0%,#0009 35%,transparent 100%)}
+@media(hover:hover) and (pointer:fine){.hero-nfc-field.is-visible{opacity:1}}
+@media(prefers-reduced-motion:reduce){.hero-nfc-field{transition:none}}
