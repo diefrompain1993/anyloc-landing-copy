@@ -235,3 +235,5 @@ button.story-link{border:0;padding:0;background:transparent;text-align:left;font
 .an-inspector .an-person{margin:12px 0}
 .an-inspector .an-empty{position:absolute;inset:60px 20px 20px;min-height:0}
 @media(max-width:620px){.an-detail-grid{grid-template-columns:minmax(0,1fr)}.an-detail-grid .an-inspector{contain:none}.is-contractor .an-inspector{min-height:420px}}
+@media(max-width:620px){.is-contractor .an-person{min-height:30px;margin:6px 0}.is-contractor .an-person small{display:none}}
+@media(max-width:620px){.is-contractor .an-work-total{margin:10px 0}.is-contractor .an-date-row{padding-top:12px}.is-contractor .an-employee-caption{margin:8px 0 12px}}
