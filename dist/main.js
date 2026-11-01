@@ -115,14 +115,14 @@ function sync(){cancelAnimationFrame(frame);frame=0;last=0;document.querySelecto
 new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;sync();},{threshold:.05}).observe(graph);
 quiet.addEventListener('change',()=>{paused=quiet.matches;render();sync();});document.addEventListener('visibilitychange',sync);render();sync();
 
-// A local NFC texture follows the pointer gently; no idle animation loop.
+// Reveal stationary antenna contours; only the soft mask follows the pointer.
 (()=>{
  const hero=document.querySelector('.connected-hero'),field=document.querySelector('.hero-nfc-field');
  if(!hero||!field||!matchMedia('(hover:hover) and (pointer:fine)').matches)return;
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
  let x=0,y=0,tx=0,ty=0,frame=0,active=false;
  function draw(){
-  const blend=reduced.matches?1:.12;x+=(tx-x)*blend;y+=(ty-y)*blend;
+  const blend=reduced.matches?1:.085;x+=(tx-x)*blend;y+=(ty-y)*blend;
   field.style.setProperty('--nfc-x',x+'px');field.style.setProperty('--nfc-y',y+'px');
   frame=active&&(Math.abs(tx-x)+Math.abs(ty-y)>.2)?requestAnimationFrame(draw):0;
  }
