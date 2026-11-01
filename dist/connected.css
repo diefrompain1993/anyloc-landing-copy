@@ -175,6 +175,6 @@ button.story-link{border:0;padding:0;background:transparent;text-align:left;font
 
 /* Architectural floor plan: stationary lines with a soft local reveal. */
 .connected-hero{isolation:isolate}
-.hero-object-field{position:absolute;z-index:-1;inset:0 0 auto;height:560px;pointer-events:none;opacity:0;transition:opacity 900ms ease;background-position:center top;background-size:1400px 600px;background-repeat:no-repeat;background-image:url("assets/hero-object-plan.svg");mask-image:radial-gradient(ellipse 300px 225px at var(--field-x,50%) var(--field-y,200px),#000b 0%,#0006 36%,transparent 100%);-webkit-mask-image:radial-gradient(ellipse 300px 225px at var(--field-x,50%) var(--field-y,200px),#000b 0%,#0006 36%,transparent 100%)}
-@media(hover:hover) and (pointer:fine){.hero-object-field.is-visible{opacity:.8}}
+.hero-object-field{position:absolute;z-index:-1;inset:0 0 auto;height:560px;pointer-events:none;opacity:0;transition:opacity 900ms ease;background-position:center top;background-size:1400px 600px;background-repeat:no-repeat;background-image:url("assets/hero-object-plan.svg?v=2");mask-image:radial-gradient(ellipse 350px 245px at var(--field-x,50%) var(--field-y,200px),#000d 0%,#0008 40%,transparent 100%);-webkit-mask-image:radial-gradient(ellipse 350px 245px at var(--field-x,50%) var(--field-y,200px),#000d 0%,#0008 40%,transparent 100%)}
+@media(hover:hover) and (pointer:fine){.hero-object-field.is-visible{opacity:.95}}
 @media(prefers-reduced-motion:reduce){.hero-object-field{transition:none}}
