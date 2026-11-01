@@ -20,7 +20,40 @@ function actionLabel(person,action){
  return people[person][8]==='female' ? (a[3] ?? a[0]) : a[0];
 }
 let portraitId=0;
-function portrait(p,i){const id=`portrait-clip-${portraitId++}`;return `<defs><clipPath id="${id}"><circle r="47"/></clipPath></defs><g clip-path="url(#${id})"><circle r="47" fill="${p[2]}"/><path d="M-37 44Q-36 18 0 17Q36 18 37 44" fill="${p[5]}"/><path d="M-8 13v12q8 10 16 0V13" fill="${p[3]}"/><path d="${[1,2,4,6].includes(i)?'M-23 0q-6-39 24-37 28 2 23 37L19-9h-38Z':'M-22 1q-7-39 22-37 31-1 25 40L21 22h-43Z'}" fill="${p[4]}"/><ellipse cy="-3" rx="21" ry="26" fill="${p[3]}"/><path d="M-23-10q-6-26 22-27 29 0 25 28-14-3-24-17-8 15-23 16" fill="${p[4]}"/><g fill="#30262b"><ellipse cx="-8" cy="-2" rx="1.7" ry="2.2"/><ellipse cx="8" cy="-2" rx="1.7" ry="2.2"/></g><path d="M-5 10q5 5 10 0" fill="none" stroke="#874f45" stroke-width="2" stroke-linecap="round"/>${i%3===0?'<g fill="none" stroke="#493d49" stroke-width="1.8"><rect x="-17" y="-8" width="14" height="11" rx="4"/><rect x="3" y="-8" width="14" height="11" rx="4"/><path d="M-3-4h6"/></g>':''}</g>`;}
+function portrait(p,i){
+ const id=`portrait-clip-${portraitId++}`,skin=p[3],hair=p[4];
+ const backs=[
+ 'M-25 23V-13Q-26-39 0-38Q27-38 25-9V24Z',
+ 'M-23-5Q-27-35-3-36Q18-42 25-19L22 0Z',
+ 'M-23-5Q-29-27-17-32Q-19-42-7-39Q0-47 8-39Q23-42 24-29Q31-23 23-4Z',
+ 'M-25 20Q-34 0-24-21Q-23-35-4-35Q18-40 26-18Q33 5 23 20Z',
+ 'M-23 0L-23-22Q-18-37 2-35L23-24V0Z',
+ 'M-24 24L-25-12Q-23-36 0-36Q27-35 25-10L23 24Z',
+ 'M-23-2Q-25-29-9-31Q12-37 23-14L23 0Z',
+ 'M-23 20Q-30-9-19-27Q-10-40 12-31Q27-23 24 3L21 23Z'
+ ];
+ const fronts=[
+ 'M-24-9Q-28-34-3-37Q21-39 25-12L16-17L1-28Q-7-12-24-9Z',
+ 'M-23-8L-24-22Q-21-37-4-35L17-38L24-25Q7-28-1-18Q-10-10-23-8Z',
+ 'M-23-13Q-27-29-17-31Q-12-39-4-33Q3-40 10-32Q23-35 24-15L17-19L9-16L1-21L-9-16Z',
+ 'M-25-6Q-29-34-5-34Q22-38 26-9L18-16Q0-10-8-27Q-14-15-25-6Z',
+ 'M-23-13V-23Q-13-35 4-32L22-23V-14Q8-20-1-23Q-12-14-23-13Z',
+ 'M-24-7Q-28-34 0-36Q28-34 24-7L17-9L14-22L12-10L-3-13L-8-23L-11-10Z',
+ 'M-22-13Q-20-28-7-30Q13-34 22-13L14-17Q6-24-1-19L-15-14Z',
+ 'M-23-6Q-25-31-5-33Q17-36 23-13Q11-16 5-27Q-5-9-23-6Z'
+ ];
+ const extras=[
+ '<g fill="none" stroke="#493d49" stroke-width="1.8"><rect x="-17" y="-8" width="14" height="11" rx="4"/><rect x="3" y="-8" width="14" height="11" rx="4"/><path d="M-3-4h6"/></g>',
+ '<path d="M-6 12Q0 16 6 12" fill="none" stroke="#874f45" stroke-width="1.5"/>',
+ '<path d="M-20 4Q-17 26 0 26Q17 26 20 4L13 13Q0 20-13 13Z" fill="'+hair+'"/>',
+ '<g fill="#efc76e"><circle cx="-22" cy="9" r="3"/><circle cx="22" cy="9" r="3"/></g>',
+ '<path d="M-8 9Q-4 4 0 8Q4 4 8 9Q3 12 0 10Q-3 12-8 9" fill="'+hair+'"/>',
+ '<path d="M-22-20Q0-40 23-20" fill="none" stroke="#ead293" stroke-width="4"/>',
+ '<g fill="none" stroke="#384b62" stroke-width="2"><circle cx="-10" cy="-3" r="7"/><circle cx="10" cy="-3" r="7"/><path d="M-3-3h6"/></g>',
+ '<g fill="#b87a63"><circle cx="-12" cy="4" r="1"/><circle cx="-8" cy="5" r="1"/><circle cx="8" cy="5" r="1"/><circle cx="12" cy="4" r="1"/></g>'
+ ];
+ return `<defs><clipPath id="${id}"><circle r="47"/></clipPath></defs><g clip-path="url(#${id})"><circle r="47" fill="${p[2]}"/>${i===7?`<circle cx="16" cy="-31" r="12" fill="${hair}"/>`:''}<path d="${backs[i]}" fill="${hair}"/><path d="M-38 48Q-37 20 0 19Q37 20 38 48" fill="${p[5]}"/><path d="M-8 13v12q8 10 16 0V13" fill="${skin}"/><ellipse cy="-3" rx="${[21,20,22,21,22,20,21,19][i]}" ry="${[26,27,25,25,26,27,26,25][i]}" fill="${skin}"/><path d="${fronts[i]}" fill="${hair}"/><g fill="#30262b"><ellipse cx="-8" cy="-2" rx="1.7" ry="2.2"/><ellipse cx="8" cy="-2" rx="1.7" ry="2.2"/></g><path d="M-5 10q5 5 10 0" fill="none" stroke="#874f45" stroke-width="2" stroke-linecap="round"/>${extras[i]}</g>`;
+}
 document.querySelectorAll('[data-avatar]').forEach(el=>{const i=Number(el.dataset.avatar);el.innerHTML=`<svg viewBox="-52 -52 104 104" aria-hidden="true">${portrait(people[i],i)}</svg>`;});
 const graph=document.querySelector('#people-graph');
 const edges=[[0,1],[1,2],[2,4],[4,3],[3,6],[6,7],[7,4],[4,5],[5,2],[2,0],[0,3],[3,7],[1,4]];
