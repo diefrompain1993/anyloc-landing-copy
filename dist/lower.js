@@ -48,7 +48,7 @@ function setMobile(key,animate=true){
  panel.setAttribute('aria-labelledby',`mobile-tab-${key}`);panel.dataset.mobileView=key;
  panel.style.setProperty('--mobile-accent',d.color);panel.style.setProperty('--mobile-tint',d.bg);
  document.querySelector('#mobile-copy').innerHTML=`<div class="mobile-product"><img src="assets/favicon.png" width="32" height="32" alt=""><strong>Anyloc</strong><span>${d.title}</span></div><h2>${d.heading}</h2><p>${d.text}</p>`;
- art.innerHTML=`<img class="unified-ios-art" src="assets/ios/showcase-${key}.svg?v=9" width="680" height="520" alt="${d.first[3]}. ${d.second[3]}." draggable="false">`;
+ art.innerHTML=`<img class="unified-ios-art" src="assets/ios/showcase-${key}.svg?v=10" width="680" height="520" alt="${d.first[3]}. ${d.second[3]}." draggable="false">`;
  if(animate&&!quiet.matches){panel.getAnimations().forEach(a=>a.cancel());panel.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:380,easing:'cubic-bezier(.22,1,.36,1)'});}
 }
 mobileTabs.forEach((button,index)=>{
