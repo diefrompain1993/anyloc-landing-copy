@@ -45,9 +45,10 @@ function setMobile(key,animate=true){
  if(activeMobile===key)return;activeMobile=key;
  const d=mobileViews[key],panel=document.querySelector('#mobile-panel'),art=document.querySelector('#mobile-collage');
  mobileTabs.forEach(b=>{const selected=b.dataset.mobile===key;b.setAttribute('aria-selected',String(selected));b.tabIndex=selected?0:-1;});
+ if(animate){const tab=mobileTabs.find(b=>b.dataset.mobile===key),strip=tab.parentElement;strip.scrollTo({left:tab.offsetLeft-strip.offsetLeft-(strip.clientWidth-tab.clientWidth)/2,behavior:quiet.matches?'instant':'smooth'});}
  panel.setAttribute('aria-labelledby',`mobile-tab-${key}`);panel.dataset.mobileView=key;
  panel.style.setProperty('--mobile-accent',d.color);panel.style.setProperty('--mobile-tint',d.bg);
- document.querySelector('#mobile-copy').innerHTML=`<div class="mobile-product"><img src="assets/favicon.png" width="32" height="32" alt=""><strong>Anyloc</strong><span>${d.title}</span></div><h2>${d.heading}</h2><p>${d.text}</p>`;
+ document.querySelector('#mobile-copy').innerHTML=`<div class="mobile-product"><img src="assets/favicon.png" width="32" height="32" alt=""><strong>Anyloc</strong><span>${d.title}</span></div><h2>${d.heading.replaceAll('<br>','<br> ')}</h2><p>${d.text}</p>`;
  art.innerHTML=`<img class="unified-ios-art" src="assets/ios/showcase-${key}.svg?v=10" width="680" height="520" alt="${d.first[3]}. ${d.second[3]}." draggable="false">`;
  if(animate&&!quiet.matches){panel.getAnimations().forEach(a=>a.cancel());panel.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:380,easing:'cubic-bezier(.22,1,.36,1)'});}
 }
@@ -120,6 +121,7 @@ const analyticsTotals=Object.fromEntries(Object.keys(analyticsLabels).map(k=>[k,
 const analyticsObjects=[{name:'БЦ Север',hours:184,people:4,days:23},{name:'ЖК Сосновый',hours:128,people:3,days:16},{name:'Технопарк',hours:72,people:2,days:9},{name:'Склад Восток',hours:0,people:0,days:0}];
 function analyticsCalendar(){return `<div class="an-calendar"><div class="an-panel-title"><h4>Календарь активности</h4><span>Октябрь</span></div><div class="an-week">${['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].map(d=>`<span>${d}</span>`).join('')}</div><div class="an-days">${'<span></span>'.repeat(3)}${analyticsDays.map((v,i)=>`<button data-analytics-day="${i+1}" aria-pressed="${analyticsDay===i+1}" aria-label="${i+1} октября: ${analyticsLabels[analyticsMetric]} — ${v[analyticsMetric]}" style="--heat:${v[analyticsMetric]?Math.min(4,Math.ceil(v[analyticsMetric]/(analyticsMetric==='visits'?3:1))):0}"><span>${i+1}</span><b>${v[analyticsMetric]||'—'}</b></button>`).join('')}</div><div class="an-legend"><span>Меньше</span>${[0,1,2,3,4].map(i=>`<i style="--heat:${i}"></i>`).join('')}<span>Больше</span></div></div>`;}
 function renderAnalytics(animate=false){
+ document.querySelector('#management-context-name').textContent=analyticsMode==='object'?'Объект · БЦ Север':'Подрядчик · Техсервис';
  const isObject=analyticsMode==='object',selected=analyticsDays[analyticsDay-1],obj=analyticsObjects[analyticsObject],people=[[['Алексей Воронов','АВ',5],['Елена Соколова','ЕС',3],['Михаил Крылов','МК',2],['Анна Белова','АБ',2]],[['Михаил Крылов','МК',4],['Анна Белова','АБ',2],['Даниил Орлов','ДО',2]],[['Даниил Орлов','ДО',3],['Мария Волкова','МВ',1]],[]][analyticsObject];
  analyticsBoard.innerHTML=`
  <div class="an-metrics">${isObject?Object.entries(analyticsLabels).map(([key,label])=>`<button data-analytics-metric="${key}" aria-pressed="${analyticsMetric===key}"><span>${label}</span><strong>${analyticsTotals[key]}</strong><small>за месяц <span>↗</span></small></button>`).join(''):`<div><span>Отработано за месяц</span><strong>384 <small>ч</small></strong><small>на всех объектах</small></div><div><span>Сотрудники</span><strong>6</strong><small>с посещениями за месяц</small></div><div><span>Объекты с посещениями</span><strong>3 <small>из 4</small></strong><small>1 объект без посещений</small></div>`}</div>
@@ -159,3 +161,14 @@ document.querySelector('.contact-done').addEventListener('click',closeContact);
 contactDialog.addEventListener('cancel',event=>{event.preventDefault();closeContact();});
 contactDialog.addEventListener('click',event=>{const r=contactDialog.getBoundingClientRect();if(event.target===contactDialog&&(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom))closeContact();});
 contactForm.addEventListener('submit',event=>{event.preventDefault();contactTouched=true;if(!validateContact(true)){contactPhone.focus();return;}contactForm.hidden=true;document.querySelector('#contact-title').hidden=true;contactDialog.setAttribute('aria-labelledby','contact-result-title');document.querySelector('#contact-description').hidden=true;contactResult.hidden=false;contactResult.focus();if(!quiet.matches)contactResult.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:300,easing:'ease-out'});});
+
+// Compact mobile navigation, with the same links as on desktop.
+const navToggle=document.querySelector('.nav-toggle');
+const siteHeader=document.querySelector('.header');
+function closeNavigation(){siteHeader.classList.remove('nav-open');navToggle.setAttribute('aria-expanded','false');navToggle.setAttribute('aria-label','Открыть меню');}
+navToggle.addEventListener('click',()=>{const open=navToggle.getAttribute('aria-expanded')!=='true';siteHeader.classList.toggle('nav-open',open);navToggle.setAttribute('aria-expanded',String(open));navToggle.setAttribute('aria-label',open?'Закрыть меню':'Открыть меню');});
+document.querySelectorAll('#site-navigation a').forEach(a=>a.addEventListener('click',closeNavigation));
+document.addEventListener('click',e=>{if(!siteHeader.contains(e.target))closeNavigation();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&siteHeader.classList.contains('nav-open')){closeNavigation();navToggle.focus();}});
+document.querySelector('.header .contact-trigger').addEventListener('click',closeNavigation);
+matchMedia('(min-width: 901px)').addEventListener('change',closeNavigation);
