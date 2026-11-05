@@ -4,7 +4,7 @@ const quiet = matchMedia('(prefers-reduced-motion: reduce)');
 world.classList.add('al-motion');
 const revealObserver = new IntersectionObserver(entries => {
   entries.forEach(entry => { if(entry.isIntersecting) {entry.target.classList.add('is-visible'); revealObserver.unobserve(entry.target);} });
-}, {threshold: .12});
+}, {threshold: 0, rootMargin:'300px'});
 world.querySelectorAll('[data-enter]').forEach(element => revealObserver.observe(element));
 
 const storyIcon=(type)=>`<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${({check:'<path d="m5 12 4 4L19 6"/>',nfc:'<path d="M7 8a6 6 0 0 1 0 8M11 5a10 10 0 0 1 0 14M15 2a14 14 0 0 1 0 20"/>',file:'<path d="M14 3H5v18h14V8Zm0 0v5h5M8 12h8M8 16h6"/>',camera:'<path d="M3 7h4l2-3h6l2 3h4v14H3Z"/><circle cx="12" cy="13" r="4"/>'})[type]}</svg>`;
@@ -25,7 +25,7 @@ function setStory(key,animate=true){
  };
  const v=sceneDetails[key];
  const extra=key==='presence'?`<div class="exhibit-token">${storyIcon('nfc')}<span>NFC</span></div>`:key==='service'?`<div class="exhibit-mini"><span>Вентиляция</span><div class="inspection-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><b>${storyIcon('check')} Проверено</b></div>`:`<div class="exhibit-photo"><img src="assets/atrium.jpg" alt="Чистый холл после уборки"><span>${storyIcon('camera')} Фото приложено</span></div>`;
- document.querySelector('#story-visual').innerHTML=`<div class="exhibit-light"></div><img class="exhibit-building" src="assets/scenario-building.png" alt="Объёмный макет офисного здания с входом и рабочими помещениями"><div class="exhibit-pin">${storyIcon(v.icon)}<span>${v.pin}</span></div>${extra}<div class="exhibit-event"><div class="exhibit-event-top"><span>${storyIcon(v.icon)}</span><b>${v.name}</b><time>${v.time}</time></div><p>${v.detail}</p><div class="exhibit-event-status">${storyIcon('check')}${v.status}<span></span></div></div>`;
+ document.querySelector('#story-visual').innerHTML=`<div class="exhibit-light"></div><img class="exhibit-building" src="assets/scenario-building.webp" alt="Объёмный макет офисного здания с входом и рабочими помещениями"><div class="exhibit-pin">${storyIcon(v.icon)}<span>${v.pin}</span></div>${extra}<div class="exhibit-event"><div class="exhibit-event-top"><span>${storyIcon(v.icon)}</span><b>${v.name}</b><time>${v.time}</time></div><p>${v.detail}</p><div class="exhibit-event-status">${storyIcon('check')}${v.status}<span></span></div></div>`;
  if(animate&&!quiet.matches){panel.querySelectorAll('.story-copy,.exhibit-event,.exhibit-pin,.exhibit-token,.exhibit-mini,.exhibit-photo').forEach(el=>el.animate([{opacity:0,translate:'0 10px'},{opacity:1,translate:'0 0'}],{duration:450,easing:'cubic-bezier(.22,1,.36,1)'}));}
 }
 document.querySelectorAll('[data-place]').forEach(b=>b.addEventListener('click',()=>setStory(b.dataset.place)));
@@ -40,16 +40,37 @@ const mobileViews={
  history:{title:'История',heading:'Просматривайте отметки<br>и рабочее время',text:'Проверьте рабочие часы за неделю, время входа и выхода, а также отправленные отчёты. Записи в истории сгруппированы по дням.',chips:['Рабочие часы','Отметки','Отчёты'],color:'#348269',bg:'#e4f2eb',first:['history',100,310,'Рабочие часы за неделю в приложении'],second:['history',430,620,'История входов, выходов и отправленных отчётов'],label:'Записи по дням',stamp:'История',icon:'file'}
 };
 const mobileTabs=[...document.querySelectorAll('[data-mobile]')];
-let activeMobile;
-function setMobile(key,animate=true){
- if(activeMobile===key)return;activeMobile=key;
+const mobileArt=new Map();
+function prepareMobileArt(key){
+ if(!mobileArt.has(key)){
+  const img=new Image();img.className='unified-ios-art';img.width=680;img.height=520;img.draggable=false;
+  img.alt=mobileViews[key].first[3]+'. '+mobileViews[key].second[3]+'.';
+  img.src='assets/ios/showcase-'+key+'.svg?v=12';
+  const ready=img.decode().then(()=>img);
+  ready.catch(()=>{});mobileArt.set(key,ready);
+ }
+ return mobileArt.get(key);
+}
+Object.keys(mobileViews).forEach(prepareMobileArt);
+let activeMobile,mobileRequest=0;
+async function setMobile(key,animate=true){
+ const request=++mobileRequest;
+ if(activeMobile===key){document.querySelector('#mobile-panel').removeAttribute('aria-busy');return;}
+ const target=document.querySelector('#mobile-panel');target.setAttribute('aria-busy','true');
+ let decoded;
+ try{decoded=await prepareMobileArt(key);}catch{
+  if(request===mobileRequest){target.removeAttribute('aria-busy');mobileArt.delete(key);}
+  return;
+ }
+ if(request!==mobileRequest)return;
+ activeMobile=key;target.removeAttribute('aria-busy');
  const d=mobileViews[key],panel=document.querySelector('#mobile-panel'),art=document.querySelector('#mobile-collage');
  mobileTabs.forEach(b=>{const selected=b.dataset.mobile===key;b.setAttribute('aria-selected',String(selected));b.tabIndex=selected?0:-1;});
  if(animate){const tab=mobileTabs.find(b=>b.dataset.mobile===key),strip=tab.parentElement;strip.scrollTo({left:tab.offsetLeft-strip.offsetLeft-(strip.clientWidth-tab.clientWidth)/2,behavior:quiet.matches?'instant':'smooth'});}
  panel.setAttribute('aria-labelledby',`mobile-tab-${key}`);panel.dataset.mobileView=key;
  panel.style.setProperty('--mobile-accent',d.color);panel.style.setProperty('--mobile-tint',d.bg);
  document.querySelector('#mobile-copy').innerHTML=`<div class="mobile-product"><img src="assets/favicon.png" width="32" height="32" alt=""><strong>Anyloc</strong><span>${d.title}</span></div><h2>${d.heading.replaceAll('<br>','<br> ')}</h2><p>${d.text}</p>`;
- art.innerHTML=`<img class="unified-ios-art" src="assets/ios/showcase-${key}.svg?v=11" width="680" height="520" alt="${d.first[3]}. ${d.second[3]}." draggable="false">`;
+ art.replaceChildren(decoded);
  if(animate&&!quiet.matches){panel.getAnimations().forEach(a=>a.cancel());panel.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:380,easing:'cubic-bezier(.22,1,.36,1)'});}
 }
 mobileTabs.forEach((button,index)=>{

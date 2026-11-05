@@ -86,8 +86,11 @@ s+=button(180,393,329,'Отправить отчёт')
 import base64
 for x,y,a,name in [(55,269,-9,'technical-room.png'),(383,270,7,'utility-inspection.png')]:
  p=root/'assets'/name
- data=base64.b64encode(p.read_bytes()).decode()
- s+=f'<g transform="rotate({a} {x+90} {y+55})">'+box(x,y,177,112,'#fff','#fff',12)+f'<clipPath id="photo{x}"><rect x="{x+6}" y="{y+6}" width="165" height="100" rx="8"/></clipPath><image href="data:image/png;base64,{data}" x="{x+6}" y="{y+6}" width="165" height="100" preserveAspectRatio="xMidYMid slice" clip-path="url(#photo{x})"/></g>'
+ from PIL import Image
+ photo=Image.open(p).convert('RGB');photo.thumbnail((660,400))
+ photo_buffer=io.BytesIO();photo.save(photo_buffer,format='JPEG',quality=85,optimize=True)
+ data=base64.b64encode(photo_buffer.getvalue()).decode()
+ s+=f'<g transform="rotate({a} {x+90} {y+55})">'+box(x,y,177,112,'#fff','#fff',12)+f'<clipPath id="photo{x}"><rect x="{x+6}" y="{y+6}" width="165" height="100" rx="8"/></clipPath><image href="data:image/jpeg;base64,{data}" x="{x+6}" y="{y+6}" width="165" height="100" preserveAspectRatio="xMidYMid slice" clip-path="url(#photo{x})"/></g>'
 save('report',s)
 
 # Tasks: a single staggered stack; completion slips out of the main list.

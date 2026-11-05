@@ -369,3 +369,11 @@ button.story-link{border:0;padding:0;background:transparent;text-align:left;font
 .management-explanation p+p{margin-top:16px}
 @media(max-width:700px){.management-explanation{margin-top:20px}.management-explanation p{font-size:15px}}
 @media(min-width:901px) and (max-width:1200px){.header,.header.is-past-intro{grid-template-columns:144px 1fr auto;gap:16px;padding-inline:3%}.header nav{gap:14px}.header nav a{font-size:11px}.header .contact-trigger{font-size:11px;padding-inline:13px;margin-right:0}}
+.tag-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:15px;color:#72819a}
+.tag-loading>span{width:30px;height:30px;border:2px solid #d8e3f5;border-top-color:#6589c5;border-radius:50%;animation:tag-load 1s linear infinite}
+.tag-loading small{font-size:12px}
+.finale-tag .tag-fallback{display:none}
+.finale-tag[data-state=fallback] .tag-fallback{display:block}
+.finale-tag:not([data-state=loading]) .tag-loading{display:none}
+@keyframes tag-load{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.tag-loading>span{animation:none}}

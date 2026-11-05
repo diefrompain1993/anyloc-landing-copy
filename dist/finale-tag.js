@@ -1,10 +1,10 @@
 // Original physical NFC plate, restored from the first landing design.
 const stage=document.querySelector('#finale-tag');
 const canvas=stage.querySelector('canvas');
-let visible=false,started=false;
+let visible=false;
+initPlate().catch(error=>{stage.dataset.state='fallback';console.warn('NFC plate preview unavailable',error);});
 const observer=new IntersectionObserver(entries=>{
  visible=entries[0].isIntersecting;
- if(visible&&!started){started=true;initPlate().catch(error=>{stage.dataset.state='fallback';console.warn('NFC plate preview unavailable',error);});}
  if(visible)stage.dispatchEvent(new Event('plate-visible'));
 },{rootMargin:'120px'});
 observer.observe(stage);
@@ -27,7 +27,7 @@ async function initPlate(){
   // Three registered maps describe a fine powder-coated surface: pigment, roughness, and relief.
   // ExtrudeGeometry uses world-space cap UVs, so one texture spans the whole plate rather than tiling below a pixel.
   let seed=1977;const random=()=>{seed=(1664525*seed+1013904223)>>>0;return seed/4294967296;};
-  const textureSize=1024,gridSize=513,noise=Float32Array.from({length:gridSize*gridSize},random);
+  const textureSize=512,gridSize=257,noise=Float32Array.from({length:gridSize*gridSize},random);
   function surfaceMap(kind){
     const surface=document.createElement('canvas');surface.width=surface.height=textureSize;
     const context=surface.getContext('2d'),pixels=context.createImageData(textureSize,textureSize);
@@ -91,7 +91,7 @@ async function initPlate(){
    introPending=false;introActive=true;dirty=true;requestFrame();entranceObserver.disconnect();
   }
  },{threshold:.45});
- if(introPending)entranceObserver.observe(stage);
+
  function takeControl(){
   if(!introPending&&!introActive)return;
   introPending=false;introActive=false;entranceObserver.disconnect();
@@ -150,10 +150,10 @@ async function initPlate(){
  stage.addEventListener('plate-visible',()=>{dirty=true;requestFrame();});
  canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();cancelAnimationFrame(frame);frame=0;stage.dataset.state='fallback';});
  canvas.addEventListener('webglcontextrestored',()=>{stage.dataset.state='ready';dirty=true;requestFrame();});
- new THREE.TextureLoader().load('assets/atrium.jpg',tex=>{
+ await new Promise(resolve=>new THREE.TextureLoader().load('assets/atrium.jpg',tex=>{
   tex.mapping=THREE.EquirectangularReflectionMapping;tex.colorSpace=THREE.SRGBColorSpace;
   const pmrem=new THREE.PMREMGenerator(renderer);scene.environment=pmrem.fromEquirectangular(tex).texture;
-  scene.environmentIntensity=.85;tex.dispose();pmrem.dispose();dirty=true;requestFrame();
- });
- stage.dataset.state='ready';resize();
+  scene.environmentIntensity=.85;tex.dispose();pmrem.dispose();dirty=true;resolve();
+ },undefined,()=>resolve()));
+ resize();renderer.render(scene,camera);stage.dataset.state='ready';if(introPending)entranceObserver.observe(stage);requestFrame();
 }
