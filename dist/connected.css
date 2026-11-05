@@ -377,3 +377,9 @@ button.story-link{border:0;padding:0;background:transparent;text-align:left;font
 .finale-tag:not([data-state=loading]) .tag-loading{display:none}
 @keyframes tag-load{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){.tag-loading>span{animation:none}}
+
+/* Original product branding and contact name field. */
+.mobile-product .mobile-brand-logo{width:132px;height:auto;border-radius:0;flex-shrink:0}
+.header .brand img{height:auto;object-fit:contain}
+#contact-name{font-size:17px;letter-spacing:normal;padding-right:17px}
+#contact-name-error{min-height:20px;margin:6px 0 12px}

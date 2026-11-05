@@ -69,7 +69,7 @@ async function setMobile(key,animate=true){
  if(animate){const tab=mobileTabs.find(b=>b.dataset.mobile===key),strip=tab.parentElement;strip.scrollTo({left:tab.offsetLeft-strip.offsetLeft-(strip.clientWidth-tab.clientWidth)/2,behavior:quiet.matches?'instant':'smooth'});}
  panel.setAttribute('aria-labelledby',`mobile-tab-${key}`);panel.dataset.mobileView=key;
  panel.style.setProperty('--mobile-accent',d.color);panel.style.setProperty('--mobile-tint',d.bg);
- document.querySelector('#mobile-copy').innerHTML=`<div class="mobile-product"><img src="assets/favicon.png" width="32" height="32" alt=""><strong>Anyloc</strong><span>${d.title}</span></div><h2>${d.heading.replaceAll('<br>','<br> ')}</h2><p>${d.text}</p>`;
+ document.querySelector('#mobile-copy').innerHTML=`<div class="mobile-product"><img class="mobile-brand-logo" src="assets/anyloc-brand-original.png" alt="Anyloc"><span>${d.title}</span></div><h2>${d.heading.replaceAll('<br>','<br> ')}</h2><p>${d.text}</p>`;
  art.replaceChildren(decoded);
  if(animate&&!quiet.matches){panel.getAnimations().forEach(a=>a.cancel());panel.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:380,easing:'cubic-bezier(.22,1,.36,1)'});}
 }
@@ -156,6 +156,12 @@ renderAnalytics();
 // Contact prototype: validates locally and never sends or persists phone numbers.
 const contactDialog=document.querySelector('#contact-dialog');
 const contactForm=document.querySelector('#contact-form');
+const contactName=document.querySelector('#contact-name');
+const contactNameError=document.querySelector('#contact-name-error');
+let contactNameTouched=false;
+function validateContactName(showError=false){const valid=/\p{L}/u.test(contactName.value.trim());contactName.setAttribute('aria-invalid',String(showError&&!valid));contactNameError.textContent=showError&&!valid?'Укажите ваше имя.':'';return valid;}
+contactName.addEventListener('input',()=>validateContactName(contactNameTouched));
+contactName.addEventListener('blur',()=>{contactNameTouched=true;validateContactName(true);});
 const contactPhone=document.querySelector('#contact-phone');
 const contactError=document.querySelector('#contact-error');
 const contactResult=document.querySelector('.contact-result');
@@ -174,14 +180,14 @@ contactPhone.addEventListener('keydown',event=>{
  }
 });
 contactPhone.addEventListener('blur',()=>{if(contactPhone.value){contactTouched=true;validateContact(true);}});
-function openContact(event){if(contactDialog.open||contactClosing)return;contactOpener=event.currentTarget;contactForm.reset();contactTouched=false;contactOverflow=false;validateContact();contactResult.hidden=true;contactForm.hidden=false;document.querySelector('#contact-title').hidden=false;contactDialog.setAttribute('aria-labelledby','contact-title');document.querySelector('#contact-description').hidden=false;contactScroll=document.documentElement.style.overflow;document.documentElement.style.overflow='hidden';contactDialog.showModal();if(!quiet.matches)contactDialog.animate([{opacity:0,transform:'translateY(18px) scale(.97)'},{opacity:1,transform:'translateY(0) scale(1)'}],{duration:350,easing:'cubic-bezier(.22,1,.36,1)'});contactPhone.focus();}
+function openContact(event){if(contactDialog.open||contactClosing)return;contactOpener=event.currentTarget;contactForm.reset();contactNameTouched=false;validateContactName();contactTouched=false;contactOverflow=false;validateContact();contactResult.hidden=true;contactForm.hidden=false;document.querySelector('#contact-title').hidden=false;contactDialog.setAttribute('aria-labelledby','contact-title');document.querySelector('#contact-description').hidden=false;contactScroll=document.documentElement.style.overflow;document.documentElement.style.overflow='hidden';contactDialog.showModal();if(!quiet.matches)contactDialog.animate([{opacity:0,transform:'translateY(18px) scale(.97)'},{opacity:1,transform:'translateY(0) scale(1)'}],{duration:350,easing:'cubic-bezier(.22,1,.36,1)'});contactName.focus();}
 async function closeContact(){if(!contactDialog.open||contactClosing)return;contactClosing=true;if(!quiet.matches)await contactDialog.animate([{opacity:1,transform:'translateY(0) scale(1)'},{opacity:0,transform:'translateY(10px) scale(.98)'}],{duration:180,easing:'ease-in',fill:'forwards'}).finished;contactDialog.close();contactDialog.getAnimations().forEach(a=>a.cancel());document.documentElement.style.overflow=contactScroll;contactClosing=false;contactOpener?.focus({preventScroll:true});}
 document.querySelectorAll('.contact-trigger').forEach(button=>button.addEventListener('click',openContact));
 document.querySelector('.contact-close').addEventListener('click',closeContact);
 document.querySelector('.contact-done').addEventListener('click',closeContact);
 contactDialog.addEventListener('cancel',event=>{event.preventDefault();closeContact();});
 contactDialog.addEventListener('click',event=>{const r=contactDialog.getBoundingClientRect();if(event.target===contactDialog&&(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom))closeContact();});
-contactForm.addEventListener('submit',event=>{event.preventDefault();contactTouched=true;if(!validateContact(true)){contactPhone.focus();return;}contactForm.hidden=true;document.querySelector('#contact-title').hidden=true;contactDialog.setAttribute('aria-labelledby','contact-result-title');document.querySelector('#contact-description').hidden=true;contactResult.hidden=false;contactResult.focus();if(!quiet.matches)contactResult.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:300,easing:'ease-out'});});
+contactForm.addEventListener('submit',event=>{event.preventDefault();contactTouched=true;contactNameTouched=true;const nameValid=validateContactName(true),phoneValid=validateContact(true);if(!nameValid||!phoneValid){(nameValid?contactPhone:contactName).focus();return;}contactForm.hidden=true;document.querySelector('#contact-title').hidden=true;contactDialog.setAttribute('aria-labelledby','contact-result-title');document.querySelector('#contact-description').hidden=true;contactResult.hidden=false;contactResult.focus();if(!quiet.matches)contactResult.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:300,easing:'ease-out'});});
 
 // Compact mobile navigation, with the same links as on desktop.
 const navToggle=document.querySelector('.nav-toggle');
