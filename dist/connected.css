@@ -445,3 +445,7 @@ button.story-link{border:0;padding:0;background:transparent;text-align:left;font
  .network-visual svg{height:auto;aspect-ratio:600/510}
  .person-name{font-size:17px}.person-action{font-size:13px}
 }
+/* Keep the mobile entrance marker clear of the employee event card. */
+@media(max-width:700px){
+ .scenario-exhibit [data-story=presence] .exhibit-pin{top:43%;left:39%}
+}
