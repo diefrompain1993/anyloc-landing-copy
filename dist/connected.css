@@ -397,3 +397,51 @@ button.story-link{border:0;padding:0;background:transparent;text-align:left;font
 
 /* Keep desktop navigation centered independently of action widths. */
 @media(min-width:1400px){.header,.header.is-past-intro{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:24px}.header .brand{justify-self:start}.header-actions{justify-self:end}}
+
+/* Mobile reading and touch refinements; desktop composition is unchanged. */
+@media(max-width:700px){
+ .connected-hero h1{font-size:clamp(34px,9.7vw,56px);line-height:1.12;max-width:100%;margin-top:16px}
+ .connected-hero h1>span{display:block;white-space:nowrap}
+ .connected-hero h1>svg{width:72%;right:10%;bottom:-13px}
+ .connected-hero{min-height:0;padding-bottom:24px}
+ .network-visual{margin:28px 0 0}
+ .network-visual svg{width:100%;height:auto;aspect-ratio:390/680}
+ .person-name{font-size:17px}
+ .person-action{font-size:13px}
+ .network-copy>p{font-size:15px;font-weight:400}
+ .mobile-switcher{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));width:100%;max-width:440px;overflow:visible;border-radius:22px;margin-bottom:32px;gap:4px}
+ .mobile-switcher button{grid-column:span 2;min-width:0;padding:10px 4px;font-size:12px;min-height:44px}
+ .mobile-switcher button:nth-last-child(-n+2){grid-column:span 3}
+ .mobile-product{font-size:21px;gap:10px;flex-wrap:wrap}
+ .mobile-product .mobile-brand-logo{width:118px}
+ .scenario-exhibit .story-tabs button{font-size:12px;min-height:52px}
+ .faq-list summary{font-size:18px;line-height:1.45;gap:16px}
+ .footer-nav a{min-height:44px}
+ .al-footer .footer-email{display:inline-flex;align-items:center;min-height:44px}
+ .al-finale-back{min-height:44px}
+ .contact-dialog{box-sizing:border-box;max-height:calc(100dvh - 20px);padding:48px 20px 24px;scroll-padding-block:20px}
+ .contact-dialog h2{font-size:25px;line-height:1.2;padding-right:20px}
+ .contact-dialog input{font-size:16px;min-height:52px;scroll-margin-block:24px}
+ #contact-name{font-size:16px}
+ .contact-dialog label{font-size:14px}
+ #contact-name-error{min-height:18px;margin:5px 0 8px}
+ .contact-error{font-size:12px}
+ .contact-submit,.contact-done{min-height:48px}
+ .contact-result h3{font-size:26px}
+}
+@media(max-height:500px) and (max-width:900px){
+ .header,.header.is-past-intro{position:relative}
+ .contact-dialog{max-height:calc(100dvh - 16px);padding-top:48px;padding-bottom:20px}
+}
+@media(max-width:700px){
+ .al-world .connection-intro h2{font-size:clamp(27px,7.8vw,36px);line-height:1.18}
+ .connection-intro h2 em{display:block;white-space:nowrap}
+}
+
+@media(min-width:701px) and (max-width:900px){
+ .people-network{display:block;padding:50px 6%;min-height:0}
+ .network-copy>p{max-width:620px;font-size:16px;font-weight:400}
+ .network-visual{width:100%;max-width:680px;margin:32px auto 0}
+ .network-visual svg{height:auto;aspect-ratio:600/510}
+ .person-name{font-size:17px}.person-action{font-size:13px}
+}
