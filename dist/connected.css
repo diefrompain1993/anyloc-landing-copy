@@ -383,3 +383,14 @@ button.story-link{border:0;padding:0;background:transparent;text-align:left;font
 .header .brand img{height:auto;object-fit:contain}
 #contact-name{font-size:17px;letter-spacing:normal;padding-right:17px}
 #contact-name-error{min-height:20px;margin:6px 0 12px}
+
+/* Account access alongside the contact action. */
+.header-actions{display:flex;align-items:center;justify-content:flex-end;gap:12px;justify-self:end}
+.header .header-actions .contact-trigger{margin:0}
+.header-login{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:12px 22px;border:1px solid #cbd9ef;border-radius:30px;color:#2465df;background:#fff;font-size:14px;font-weight:500;white-space:nowrap;transition:background .2s,border-color .2s}
+.header-login:hover{background:#eef4ff;border-color:#2465df}
+.header-login:focus-visible{outline:2px solid #2465df;outline-offset:3px}
+@media(min-width:901px){.header,.header.is-past-intro{grid-template-columns:144px minmax(0,1fr) auto;gap:24px}.header nav[aria-label]{position:static!important;transform:none!important;justify-self:center}}
+@media(min-width:901px) and (max-width:1200px){.header,.header.is-past-intro{gap:14px}.header-actions{gap:8px}.header-login{font-size:12px;padding-inline:14px}}
+@media(max-width:900px){.header-actions{margin-left:auto;gap:8px}.header-login{font-size:12px;padding:11px 16px}}
+@media(max-width:600px){.header,.header.is-past-intro{display:grid;grid-template-columns:1fr auto;height:auto!important;min-height:116px;padding:8px 16px!important;gap:6px 12px}.header .brand{grid-column:1;grid-row:1}.header .nav-toggle{grid-column:2;grid-row:1}.header-actions{grid-column:1/-1;grid-row:2;width:100%;margin:0;justify-content:flex-end}.header-login{flex:1}.header .header-actions .contact-trigger{flex:2;justify-content:center}html{scroll-padding-top:130px}}
